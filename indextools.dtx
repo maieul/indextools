@@ -79,7 +79,7 @@ and the derived files indextools.sty and indextools.pdf.
 \end{document}
 %</driver>
 % \fi
-% \CheckSum{797}
+% \CheckSum{793}
 %
 % \changes{v1.0}{2010/07/10}{First public version}
 % \changes{v1.0a}{2010/07/12}{Small bug correction}
@@ -1312,44 +1312,47 @@ and the derived files indextools.sty and indextools.pdf.
 \newif\ifimki@fancyhdr
 \AtBeginDocument{%
   \@ifpackageloaded{fancyhdr}{\imki@fancyhdrtrue}{\imki@fancyhdrfalse}%
-  \ifimki@fancyhdr
-    \patchcmd{\theindex}{\imki@indexheaders}{\relax}{}{}%
-    \patchcmd{\theindex}{\thispagestyle}{\@gobble}{}{}%
-  \fi
+    \ifimki@original
+     \expandafter\def\expandafter\theindex\expandafter{\expandafter
+        \imki@maybeaddtotoc\theindex}
+    \else
+      \renewenvironment{theindex}
+        {\imki@maybeaddtotoc
+         \imki@indexlevel{\indexname}%
+         \ifimki@fancyhdr\else%
+           \imki@indexheaders%
+           \thispagestyle{\imki@firstpagestyle}%
+         \fi%
+         \ifnum\imki@columns>\@ne
+           \columnsep \imki@columnsep
+           \ifx\imki@idxprologue\relax
+             \begin{multicols}{\imki@columns}
+           \else
+             \begin{multicols}{\imki@columns}[\imki@idxprologue]
+           \fi
+         \else
+           \imki@idxprologue
+         \fi
+         \global\let\imki@idxprologue\relax
+         \parindent\z@
+         \parskip\z@ \@plus .3\p@\relax
+         \columnseprule \ifKV@imki@columnseprule.4\p@\else\z@\fi
+         \raggedright
+         \let\item\@idxitem
+         \imki@othercode}
+        {\ifnum\imki@columns>\@ne\end{multicols}\fi
+    }
+\fi
 }
-%     
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 \ifimki@original
- \expandafter\def\expandafter\theindex\expandafter{\expandafter
-    \imki@maybeaddtotoc\theindex}
 \else
   \global\let\imki@idxprologue\relax
   \RequirePackage{multicol}
-  \renewenvironment{theindex}
-    {\imki@maybeaddtotoc
-     \imki@indexlevel{\indexname}\imki@indexheaders
-     \thispagestyle{\imki@firstpagestyle}%
-     \ifnum\imki@columns>\@ne
-       \columnsep \imki@columnsep
-       \ifx\imki@idxprologue\relax
-         \begin{multicols}{\imki@columns}
-       \else
-         \begin{multicols}{\imki@columns}[\imki@idxprologue]
-       \fi
-     \else
-       \imki@idxprologue
-     \fi
-     \global\let\imki@idxprologue\relax
-     \parindent\z@
-     \parskip\z@ \@plus .3\p@\relax
-     \columnseprule \ifKV@imki@columnseprule.4\p@\else\z@\fi
-     \raggedright
-     \let\item\@idxitem
-     \imki@othercode}
-    {\ifnum\imki@columns>\@ne\end{multicols}\fi
-}
 \fi
 %    \end{macrocode}
-%
 % The command \cs{indexsetup} may be used to customize some aspects of
 % index formatting.
 %    \begin{macrocode}
