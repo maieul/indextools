@@ -17,6 +17,8 @@
 
 Copyright 2010--2013 Enrico Gregorio <Enrico dot Gregorio at univr dot it>
 
+Copyright 2014 Maïeul Rouquette <maieul at maieul dot it>
+
 Distributable under the LaTeX Project Public License,
 version 1.3c or higher (your choice). The latest version of
 this license is at: http://www.latex-project.org/lppl.txt
@@ -42,7 +44,7 @@ and the derived files indextools.sty and indextools.pdf.
 %<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
 %<package>\ProvidesPackage{imakeidx}%
 %<*package>
-   [2013/07/11 v1.3a Package for typesetting indices in a synchronous mode]
+   [2014/12/01 v1.4 Package for typesetting indices in a synchronous mode]
 %</package>
 %<*driver>
 \documentclass{ltxdoc}
@@ -65,7 +67,7 @@ and the derived files indextools.sty and indextools.pdf.
 \GetFileInfo{indextools.dtx}% dtx extension required
 \title{The package \pack{imakeidx}\thanks{Version number \fileversion; last
  revision \filedate.}}
-\author{Enrico Gregorio\thanks{\texttt{Enrico dot Gregorio at univr dot it}}}
+\author{Maïeul Rouquette\thanks{\texttt{maieul at maieul dot net}} from Enrico Gregorio work}}
 \date{}
 \maketitle
 \begin{multicols}{2}
@@ -92,6 +94,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.2e}{2012/10/22}{Fixed bug with showidx simulated by memoir}
 % \changes{v1.3}{2013/07/11 }{Added internal so as to cooperate in a better
 % way with eledmac (by Maieul Roquette}
+% \changes{v1.4}{2014/12/01}{Compatibility with bidi. Fork from imakeidx. New newname indextools.}
 %
 % \begin{abstract}
 % This package exploits the |\write18| facility of modern \TeX\ system
