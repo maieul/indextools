@@ -1308,6 +1308,8 @@ and the derived files indextools.sty and indextools.pdf.
 % when \pack{fancyhdr} is not loaded. This patching could be defined
 % further on, but if it stay close to what has to be patched, it's
 % easier to understand it's operation.
+%
+% We make this redefinition at the begining of the document, to prevent redefinition by other package, like \pack{bidi}. This point is where \lpack{indextools} and \lpack{imakeidx} diverge.
 %    \begin{macrocode}
 \newif\ifimki@fancyhdr
 \AtBeginDocument{%
@@ -1344,9 +1346,6 @@ and the derived files indextools.sty and indextools.pdf.
     }
 \fi
 }
-%    \end{macrocode}
-%
-%    \begin{macrocode}
 \ifimki@original
 \else
   \global\let\imki@idxprologue\relax
