@@ -1163,7 +1163,7 @@ and the derived files indextools.sty and indextools.pdf.
   \edef\indtl@program{\indtl@progdefault}%
   \let\indtl@options\space
   \KV@indtl@noautomaticfalse\KV@indtl@intocfalse
-  \setkeys{imki}{#1}%
+  \setkeys{indtl}{#1}%
   \ifindtl@splitindex\KV@indtl@noautomaticfalse\fi
   \indtl@build\indtl@name
   \indtl@startidx\indtl@name
@@ -1175,9 +1175,9 @@ and the derived files indextools.sty and indextools.pdf.
 % distinguish anything that is being defined in this package, even the
 % keys.
 %    \begin{macrocode}
-\define@key{imki}{name}{\def\indtl@name{#1}}
-\define@key{imki}{title}{\def\indtl@title{#1}}
-\define@choicekey{imki}{program}[\indtl@val\indtl@nr]
+\define@key{indtl}{name}{\def\indtl@name{#1}}
+\define@key{indtl}{title}{\def\indtl@title{#1}}
+\define@choicekey{indtl}{program}[\indtl@val\indtl@nr]
   {makeindex,xindy,texindy,truexindy}{%
     \ifcase\indtl@nr\relax
       \def\indtl@program{makeindex}%
@@ -1188,12 +1188,12 @@ and the derived files indextools.sty and indextools.pdf.
     \or
       \def\indtl@program{xindy}%
     \fi}
-\define@key{imki}{options}{\def\indtl@options{ #1 }}
-\define@boolkey{imki}{noautomatic}[true]{}
-\define@boolkey{imki}{intoc}[true]{}
-\define@key{imki}{columns}{\def\indtl@columns{#1}}
-\define@key{imki}{columnsep}{\def\indtl@columnsep{#1}}
-\define@boolkey{imki}{columnseprule}[true]{}
+\define@key{indtl}{options}{\def\indtl@options{ #1 }}
+\define@boolkey{indtl}{noautomatic}[true]{}
+\define@boolkey{indtl}{intoc}[true]{}
+\define@key{indtl}{columns}{\def\indtl@columns{#1}}
+\define@key{indtl}{columnsep}{\def\indtl@columnsep{#1}}
+\define@boolkey{indtl}{columnseprule}[true]{}
 \def\indtl@resetdefaults{%
   \def\indtl@options{ }%
   \def\indtl@columns{2}\def\indtl@columnsep{35\p@}%
@@ -1456,20 +1456,20 @@ and the derived files indextools.sty and indextools.pdf.
 %    \begin{macrocode}
 \def\indtl@indexlevel{%
   \@ifundefined{chapter}{\section}{\chapter}*}
-\define@key{imkiindex}{level}{\def\indtl@indexlevel{#1}}
+\define@key{indtlindex}{level}{\def\indtl@indexlevel{#1}}
 \def\indtl@toclevel{%
   \@ifundefined{chapter}{section}{chapter}}
-\define@key{imkiindex}{toclevel}{\def\indtl@toclevel{#1}}
-\define@boolkey{imkiindex}{noclearpage}[true]{\let\indtl@clearpage\relax}
+\define@key{indtlindex}{toclevel}{\def\indtl@toclevel{#1}}
+\define@boolkey{indtlindex}{noclearpage}[true]{\let\indtl@clearpage\relax}
 \def\indtl@indexheaders{%
   \@mkboth{\MakeUppercase\indexname}{\MakeUppercase\indexname}}
-\define@key{imkiindex}{headers}{\def\indtl@indexheaders{\markboth#1}}
+\define@key{indtlindex}{headers}{\def\indtl@indexheaders{\markboth#1}}
 \def\indtl@firstpagestyle{plain}
-\define@key{imkiindex}{firstpagestyle}{\def\indtl@firstpagestyle{#1}}
+\define@key{indtlindex}{firstpagestyle}{\def\indtl@firstpagestyle{#1}}
 \let\indtl@othercode\relax
-\define@key{imkiindex}{othercode}{\def\indtl@othercode{#1}}
+\define@key{indtlindex}{othercode}{\def\indtl@othercode{#1}}
 \newcommand{\indexsetup}[1]{%
-  \ifindtl@original\else\setkeys{imkiindex}{#1}\fi}
+  \ifindtl@original\else\setkeys{indtlindex}{#1}\fi}
 \@onlypreamble\indexsetup
 %    \end{macrocode}
 %
