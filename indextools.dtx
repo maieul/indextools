@@ -3,11 +3,12 @@
 \begingroup
 \input docstrip.tex
 \keepsilent
-\usedir{tex/latex/imakeidx}
+\usedir{tex/latex/indextools}
 \preamble
   ___________________________________________________________
-  The imakeidx package for LaTeX
+  The indextools package for LaTeX
   Copyright (C) 2010-2013 Enrico Gregorio
+  Copyright (C) 2014 Maïeul Roquette
   All rights reserved
 
   License information appended
@@ -42,9 +43,9 @@ and the derived files indextools.sty and indextools.pdf.
 \ProvidesFile{indextools.dtx}%
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
-%<package>\ProvidesPackage{imakeidx}%
+%<package>\ProvidesPackage{indextools}%
 %<*package>
-   [2014/12/01 v1.4 Package for typesetting indices in a synchronous mode]
+   [2015/01/12 v1.4 Package for typesetting indices in a synchronous mode]
 %</package>
 %<*driver>
 \documentclass{ltxdoc}
@@ -65,9 +66,9 @@ and the derived files indextools.sty and indextools.pdf.
 \frenchspacing
 \makeatletter
 \GetFileInfo{indextools.dtx}% dtx extension required
-\title{The package \pack{imakeidx}\thanks{Version number \fileversion; last
+\title{The package \pack{indextools}\thanks{Version number \fileversion; last
  revision \filedate.}}
-\author{Maïeul Rouquette\thanks{\texttt{maieul at maieul dot net}} from Enrico Gregorio work}
+\author{Maïeul Rouquette\thanks{\texttt{maieul at maieul dot net}} from Enrico Gregorio's work}
 \date{}
 \maketitle
 \begin{multicols}{2}
@@ -79,7 +80,7 @@ and the derived files indextools.sty and indextools.pdf.
 \end{document}
 %</driver>
 % \fi
-% \CheckSum{793}
+% \CheckSum{798}
 %
 % \changes{v1.0}{2010/07/10}{First public version}
 % \changes{v1.0a}{2010/07/12}{Small bug correction}
@@ -94,17 +95,34 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.2e}{2012/10/22}{Fixed bug with showidx simulated by memoir}
 % \changes{v1.3}{2013/07/11}{Added internal so as to cooperate in a better
 % way with eledmac (by Maïeul Rouquette)}
-% \changes{v1.4}{2014/12/01}{Compatibility with bidi. Fork from imakeidx. New newname indextools}
+% \changes{v1.4}{2015/01/12}{Compatibility with bidi. Fork from imakeidx. New name indextools}
 %
 % \begin{abstract}
-% This package is a fork of the \pack{imakeidx} package. It was made by Maïeul Rouquette because the original author of \pack{imakeidx} didn't answer to the suggestion of evolutions, needs for compatibility with some package.
+% This package is a fork of the \pack{imakeidx} package. The original authors
+% of \pack{imakeidx} were Claudio Beccari and Enrico Gregorio; the first author withdrew his availability as a maintainer in 2013. The second author declined
+% some upgrade suggestions and to remove some incompatibilities with certain
+% packages that are particularly important with critical editions dealing with
+% languages that are being written from right to left.
+% Therefore this fork, named \pack{indextools}, was created by Maïeul Rouquette,
+% who acknowledges the work of the two preceding authors thanking them for the
+% excellent package they created; nevertheless this fork was necessary in order
+% to let other users benefit from its functionalities very useful in the field
+% of humanities.
+%
 % We hope that one day, only one package will be provided.
 % The differences with the \pack{imakedix} are:
 % \begin{itemize}
-% 	\item The name.
-% 	\item The compatibility with the \pack{bidi}.
+% 	\item the name;
+% 	\item the compatibility with package \pack{bidi};
+%	\item this documentation.
 % \end{itemize}
-% This package MUST not be loaded in the same time as \pack{imakeidx}.
+% This package replaces and extends the functionalities of \pack{imakeidx},
+% therefore  it MUST not be loaded at the same time as \pack{imakeidx}. Some 
+% controls are implemented to avoid these situations; if loading of
+% \pack{indextools} is required after \pack{imakeidx} is already loaded,
+% it does not get loaded; at the same time, if it gets loaded, it sets a
+% suitable macro so that \pack{imakeidx} can't be loaded after
+% \pack{indextools}.
 %
 % This package exploits the |\write18| facility of modern \TeX\ system
 % distributions that allows to run system commands while typesetting a
@@ -113,26 +131,26 @@ and the derived files indextools.sty and indextools.pdf.
 % document, are possibly split and sorted so as to include them in the
 % document itself. This process has some minor limitations: it's
 % impossible to start an index before all other pages have been
-% ejected and to have the automatic run of the index sorting program.
+% ejected.
 %
-% For support, please open issues on \url{https://github.com/maieul/indextools}.
-\end{abstract}
+% For support, please open issues on:\\[1ex] 
+% \makebox[\linewidth]{\url{https://github.com/maieul/indextools}}
+% \end{abstract}
 %
 % \section{Introduction}
 % It's been some years now that the typesetting engine of the \TeX\
 % system is just \prog{pdftex}; the original Knuthian \prog{tex} is
 % still corrected by D.\,E.~Knuth himself, but is frozen, according to
 % his will; it is still distributed by every \TeX\ distribution, but
-% in practice only \prog{pdftex}, \prog{xetex} or \prog{luatex} are
-% used as the interpreter of every macro package and the true
-% typesetter engine.
+% in practice \prog{pdftex}, \prog{xetex} or \prog{luatex} are the most used 
+% interpreters  and typesetting engines of most macro packages.
 %
 % This program \prog{pdftex} was originally born with the facility of
 % producing either a pdf output file, as its name suggests, or a dvi
 % file. Since then it has been enriched with many upgrades, also with
 % regard to the evolution of the PDF language itself. It also
 % incorporates the extensions of \eTeX\ and has the ability to open a
-% shell so as to call system commands with their arguments. The same
+% shell so as to run system commands with their arguments. The same
 % is true for \prog{xetex} and \prog{luatex}.
 % 
 % This facility, since the \TeX~Live 2010 distribution, is official,
@@ -142,7 +160,7 @@ and the derived files indextools.sty and indextools.pdf.
 % this package is \prog{makeindex}. This precaution is necessary in
 % order to avoid running malicious code. Other programs can be run,
 % though, but it's necessary to expressly tell \prog{pdftex} that it
-% can do so; this authorization is given by means of a suitable
+% can do so; this authorisation is given by means of a suitable
 % program option, as explained below.
 %
 % This package will exploit this facility in order to run a perl
@@ -161,7 +179,7 @@ and the derived files indextools.sty and indextools.pdf.
 % is necessary to enable the typesetting engine to run such facility;
 % depending on the distribution and the shell editor that is being
 % used to work on a specific document, it is necessary to add
-% \texttt{-shell-escape} (or \texttt{-\/-enable-write18} for MiK\TeX)
+% \texttt{-\/-shell-escape} (or \texttt{-\/-enable-write18} for MiK\TeX)
 % to the command with which the typesetting program is launched,
 % possibly through the shell editor. This applies to all three
 % \prog{pdftex}, \prog{xetex}, and \prog{luatex} typesetting engines.
@@ -170,22 +188,25 @@ and the derived files indextools.sty and indextools.pdf.
 % version 0.42 to 0.66, it's impossible to distinguish whether the
 % restricted shell escape is active or not, so the automatic procedure
 % will be tried anyway, unless disabled with the \texttt{noautomatic}
-% package option. With version 0.68 or later, the behavior is the same
+% package option. With version 0.68 or later, the behaviour is the same
 % as with the other engines.\par}
 %
 %
 %\section{Package usage}
 % This package is invoked as usual by means of a \cs{usepackage} command:
 % \begin{flushleft}
-% \cs{usepackage}\oarg{options}\texttt{\{imakeidx\}}
+% \cs{usepackage}\oarg{options}\texttt{\{indextools\}}
 % \end{flushleft}
 %
 % The available \meta{options} consist in a comma separated list of
 % the following options:
+% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\ttfamily#1]}
-% \Item[makeindex] in order to use the \prog{makeindex} sorting an
+% ^^A
+% \Item[makeindex] in order to use the \prog{makeindex} sorting and
 % formatting engine; this option is the default and is mutually
 % exclusive with the next option.
+% ^^A
 % \Item[xindy] in order to use the \prog{xindy} sorting and formatting
 % engine; \texttt{texindy} is an alias for \texttt{xindy} and actually
 % it's the script \prog{texindy} which is called by this package.
@@ -194,6 +215,7 @@ and the derived files indextools.sty and indextools.pdf.
 % the command line specific settings, it is possible to specify the
 % option \texttt{truexindy}; the user is then responsible to set up
 % the \prog{xindy} engine with the suitable command line options.
+% ^^A
 % \Item[noautomatic] disables the automatic splitting of the raw
 % index files and running of the system programs; this option might
 % be used to save time when one knows for sure that the index files
@@ -201,61 +223,69 @@ and the derived files indextools.sty and indextools.pdf.
 % spent in splitting, sorting and formatting is so short that this
 % option might be useful only when very lengthy indices are being
 % processed.
+% ^^A
 % \Item[nonewpage] inhibits the new page command to be issued when
 % using an article type document class and multiple indices are being
 % typeset. We don't see why someone would use multiple indices in an
 % article (except possibly for package documentations, which usually
 % provide a macro index and a list of changes).
-% \Item[quiet] suppresses all messages about manual index
-% processing.
+% ^^A
+% \Item[quiet] suppresses all messages about manual index processing.
+% ^^A
 % \Item[original] uses the class-provided \texttt{theindex}
 % environment for typesetting the indices; it is implicitly set if the
 % document class option \texttt{twocolumn} has been specified.
+% ^^A
 % \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
 % which is included in every \TeX~Live distribution since 2009. With
 % this option all index entries, which are written in one raw index
 % file, are successively split into all the requested index files;
 % in this way there is virtually no limit on the number of indices
 % that is possible to create for a particular document.
+% ^^A
 % \end{description}
 %
-% The last described option deserves an explanation. \LaTeX{} can
+% The last described option deserves an explanation. \LaTeX\ can
 % write on a limited number of files during a run, and some of these
 % \emph{output streams} are already reserved (among these: aux files,
 % toc files, lof files, lot files, plus several other ones). When more than
 % one index is produced, there's the risk to run off the number of
-% writable files, because normally \pack{imakeidx} reserves an output
+% writable files, because normally \pack{indextools} reserves an output
 % stream for each index.  So the \texttt{splitindex} option comes to
-% rescue: with it only \emph{one} raw index file is written. At the
+% rescue: with it only \emph{one} raw index file is written out. At the
 % first \cs{printindex} command, the program \prog{splitindex} is
 % called; it splits the large index file into as many parts as the
-% number of requested indices; after this, \prog{makeindex} (or
-% \prog{xindy}) can do its job. In this way only one output stream is
-% needed during the \LaTeX{} run.
+% number of requested indices; after this, \prog{makeindex} or
+% \prog{xindy} can do their job. In this way only one output stream is
+% needed during the \LaTeX\ run.
 %
 % When should you apply this option, then? With one index it's
 % useless, you should begin to consider it for two or more indices and
-% definitely use it if you get the error
+% definitely use it if you get the error message
 % \begin{verbatim}
 % ! No room for a new \write
 % \end{verbatim}
 % Apart from this case, with or without it, the results are the
 % same. See section~\ref{sec:wrong} to see what files are written
-% during the \LaTeX{} run with or without the option.
+% during the \LaTeX\ run with or without the option.
 %
 % \section{Specific package commands}
 % As it is customary when just one index is produced, the standard
 % \LaTeX\ facilities, i.e.\ the commands \cs{makeindex}, \cs{index},
 % and \cs{printindex} must be used. This package redefines them so as
-% to produce multiple indices and defines some others. The first three
+% to produce multiple indices and defines some other commands. The first three
 % of the following commands may be used only in the preamble.
+% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\ttfamily\cs{#1}]}
+% ^^A
 % \Item[makeindex] with the syntax:\\[1ex]
 % \cs{makeindex}\oarg{key-values}\\[1ex]
 % where \meta{key-values} is a comma separated list of key-value
 % assignments of the form: \texttt{key=value}; the available
 % keys are the following:
+% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\sffamily\textsl{#1}]}
+% ^^A
 % \Item[name] is the symbolic name for an index; if this key is not
 % specified, it defaults to the value of the \cs{jobname} control
 % sequence, in other words the name of the current main \texttt{.tex}
@@ -264,16 +294,19 @@ and the derived files indextools.sty and indextools.pdf.
 % doing multiple indices and is used with the \cs{index}
 % command to point to the right index.\\*
 % Example: \texttt{name=nameidx}
+% ^^A
 % \Item[title] is the title that is typeset at the beginning of the
 % specific index; if not specified, the \cs{indexname} value is
 % used.\\* Example: \texttt{title=Index of names}.
+% ^^A
 % \Item[program] is the name of the system program that is used to
 % sort and format an index; valid choices are \prog{makeindex},
 % \prog{xindy}, or \prog{texindy}, plus \prog{truexindy}. If not
 % specified the program specified among the package options is used.
 % If no option is specified, \prog{makeindex} is used. In order to
-% use \prog{xindy}, it's necessary to call \progpdflatex{} with
+% use \prog{xindy}, it's necessary to call \prog{pdflatex} with
 % the shell escape command line option.\\* Example: \texttt{program=xindy}.
+% ^^A
 % \Item[options] is the list of options to be passed to the sorting
 % and formatting program; this list is a balanced text of program
 % options, separated with the syntax required by the sorting and
@@ -281,41 +314,52 @@ and the derived files indextools.sty and indextools.pdf.
 % \prog{makeindex} sorting and formatting style \pack{mystyle.ist} and
 % avoiding any message in the screen output, write \texttt{options=-s
 % mystyle}.
+% ^^A
 % \Item[noautomatic] is a boolean key that defaults to \texttt{false};
 % you can set it to \texttt{true} by simply listing its key in the
 % key-value list, without necessarily specifying the \texttt{=true}
 % part. If specified the index sorting program won't be called during
 % the typesetting run for this particular index.
+% ^^A
 % \Item[intoc] is a boolean variable that defaults to \texttt{false};
 % if you want to set it \texttt{true} you must simply list this key in
 % the key-value list, with no need of specifying the \texttt{=true}
 % part. By setting this key to \texttt{true} an entry for this
 % particular index is put in the table of contents.
+% ^^A
 % \Item[columns] accepts an integer representing the number of columns
 % in the index; this is silently ignored if the \texttt{original} or
 % the \texttt{twocolumn} options are set; the number can even
 % be~$1$.\\* Example: \texttt{columns=3}
+% ^^A
 % \Item[columnsep] accepts a dimension representing the separation
 % between index columns; the default is $35$\,pt as in the standard
 % classes.\\* Example: \texttt{columnsep=15pt}
-% \Item[columnseprule] is boolean; if it is set, a rule will appear
+% ^^A
+% \Item[columnseprule] is a boolean option; if it is set, a rule will appear
 % between the index columns.
+% ^^A
 % \end{description}
+% ^^A
 % \Item[indexsetup] with the syntax:\\[1ex]
 % \cs{indexsetup}\marg{key-values}\\[1ex]
 % where again \meta{key-values} is a comma separated list of \texttt{key=value}
 % assignments; the available keys are:
+% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\sffamily\textsl{#1}]}
-% \Item[level] which takes as value a sectioning command such as
+% ^^A
+% \Item[level] whose acceptable values are sectioning commands such as
 % \cs{chapter} or \cs{chapter*}. Actually any command with an argument
 % will do and will receive the index title as its argument. The
 % default is \cs{chapter*} or, if the class doesn't provide chapters,
-% \cs{section*}. If you specify |\caption| so as to override the default
-% |\chapter*|, the index title goes directly to the table of contents;
-% in this case do not specify the \texttt{intoc} option.
-% \Item[toclevel] which takes as value a sectioning command
+% \cs{section*}. If you specify |\chapter| so as to override the default
+% starred command |\chapter*|, the index title goes directly to the table
+% of contents; in this case do not specify the \texttt{intoc} option.
+% ^^A
+% \Item[toclevel] whose acceptable value is a sectioning command
 % \emph{name} such as \texttt{section} to indicate the level at which
 % we want the indices appear in the table of contents.
+% ^^A
 % \Item[noclearpage] is a boolean option; when set, no \cs{clearpage}
 % will be issued between indices. You might want to set it in order to
 % have a `chapter of indices'; in this case you are responsible for
@@ -329,42 +373,51 @@ and the derived files indextools.sty and indextools.pdf.
 % \printindex[objects]
 %\end{verbatim}
 % See more on this subject in section~\ref{sec:hints}
-% \Item[firstpagestyle] which takes as value a page style, default
+% ^^A
+% \Item[firstpagestyle] whose acceptable value is a page style, default
 % \texttt{plain}. You might want to set it to \texttt{empty} or some
-% other page style defined by the class or by yourselves. This keyword
+% other page style defined by the class or by yourself. This keyword
 % is disabled when the package \pack{fancyhdr} is loaded; any definition
 % or choice of page styles must be done before typesetting the indices. 
+% ^^A
 % \Item[headers] which takes two values: the left and right marks. You
 % might want to use this for disabling automatic uppercasing, by
 % saying, for example, |headers={\indexname}{\indexname}|; notice that
 % these values should always be a pair of balanced braced texts.
 % Don't use these keys if you use \pack{fancyhdr}.
-% \Item[othercode] which takes as value arbitrary \TeX{} code that
+% ^^A
+% \Item[othercode] whose acceptable value is arbitrary \TeX\ code that
 % will be executed at the beginning of index entries typesetting. For
 % example you might want to change here the setting of \cs{parskip}.
 % \end{description}
+% ^^A
 % \Item[splitindexoptions] must have as its argument the command line
 % option to \prog{splitindex}; this might be necessary on some
 % systems. The default is |-m ""|, because we want it only for
 % splitting the large index file into its components which are later
-% processed by this package.
+% processed by this package. See the \prog{splitindex} documentation
+% for other options.
+% ^^A
 % \Item[index] with the syntax:\\[1ex]
 % \cs{index}\oarg{name}\marg{entry}\\[1ex]
-% inserts \meta{entry} into the raw index file(s); upon splitting it in
-% different files, this particular entry is listed in the specific
-% index file with name \meta{name}; if no name is specified, this
-% \meta{entry} is added to the default index with name
+% inserts \meta{entry} in the raw index file named \meta{name}; if only
+% one raw index file is being built in order to split it in different index
+% files by means of  \prog{splitindex}, the \meta{entry} is listed in the
+% specific slit index file with name \meta{name}; if no name is specified,
+% this \meta{entry} is added to the default index with name
 % \cs{jobname}. The \meta{entry} should be written according to the
 % particular syntax of the sorting and formatting program.
+% ^^A
 % \Item[indexprologue] with the syntax:\\*[1ex]
 % \cs{indexprologue}\oarg{spacing}\marg{text}\\[1ex]
-% is used to define some text to go between the index header and the
+% is used to define some \meta{text} to go between the index header and the
 % entries; the \meta{spacing} should be a vertical space command such
 % as |\vspace{36pt}| (default is \cs{bigskip}), controlling the
 % spacing between the prologue and the index proper. The command
 % affects only the next index produced by \cs{printindex} and is best
 % placed just before this command. Please read ahead for further
-% information on the use of tho command.
+% information on the use of this command.
+% ^^A
 % \Item[printindex] with the syntax:\\*[1ex]
 % \cs{printindex}\oarg{name}\\[1ex]
 % is used to typeset the particular index named \meta{name}; if no
@@ -386,7 +439,7 @@ and the derived files indextools.sty and indextools.pdf.
 % Let's see an example. The sequence of commands
 %\begin{verbatim}
 % ...
-% \usepackage{imakeidx}
+% \usepackage{indextools}
 % ...
 % \makeindex[title=Concept index]
 % \makeindex[name=persons,title=Index of names,columns=3]
@@ -416,21 +469,22 @@ and the derived files indextools.sty and indextools.pdf.
 % \cs{makeindex} have no effect. Please read more on this matter further~on.
 %
 % \section{If something goes wrong}\label{sec:wrong}
-% Since \pack{imakeidx} relies on good cooperation between package
-% options and command line options for the \LaTeX{} run, in some cases
+% Since \pack{indextools} relies on good cooperation between package
+% options and command line options for the \LaTeX\ run, in some cases
 % it may happen that the indices are not correctly built or built at
 % all.
 %
 % If you use only \prog{makeindex} and \TeX~Live 2010 or later, then
 % you shouldn't need anything special, since \prog{makeindex} is among
-% the safe programs allowed to be called during a \LaTeX{} run, be it
+% the safe programs allowed to be called during a \LaTeX\ run, be it
 % \prog{latex}, \prog{pdflatex}, \prog{xelatex}, or \prog{lualatex}.
+%
 % When the options \texttt{splitindex}, \texttt{xindy},
 % \texttt{texindy} or \texttt{truexindy} are specified (globally or
-% locally), the \LaTeX{} run should be called with the unrestricted
-% \texttt{-shell-escape} (which is \texttt{--enable-write18} for
+% locally), the \LaTeX\ run should be called with the unrestricted
+% \texttt{-\/-shell-escape} (which is \texttt{-\/-enable-write18} for
 % MiK\TeX) typesetting program  option or the \texttt{noautomatic}
-% option should be specified when loading \pack{imakeidx}.
+% option should be specified when loading \pack{indextools}.
 % 
 % Let's look at a couple of examples. In both we suppose that the
 % document \texttt{mybook.tex} defines two indices through
@@ -440,14 +494,14 @@ and the derived files indextools.sty and indextools.pdf.
 %\end{verbatim}
 % where |...| denotes possible options excluding \texttt{name}.
 %
-% First of all we examine the case when \pack{imakeidx} is called
+% First of all we examine the case when \pack{indextools} is called
 % \emph{without} \texttt{splitindex}. Two files called
 % \texttt{mybook.idx} and \texttt{secondary.idx} will be written
-% during the \LaTeX{} run. At the corresponding \cs{printindex}
+% during the \LaTeX\ run. At the corresponding \cs{printindex}
 % command, \prog{makeindex} will act on each of them producing the files
 % \texttt{mybook.ind}, \texttt{mybook.ilg}, \texttt{secondary.ind} and
 % \texttt{secondary.ilg}. The \texttt{.ind} files contain the relevant
-% \texttt{theindex} environments with alphabetized entries, while in
+% \texttt{theindex} environments with alphabetised entries, while in
 % the \texttt{.ilg} files \prog{makeindex} will write its log. You can
 % check in \texttt{mybook.log} whether the \prog{makeindex} run has
 % been executed by searching for a line
@@ -457,13 +511,13 @@ and the derived files indextools.sty and indextools.pdf.
 % where |<...>| stands for the rest of the command line in the
 % particular case. If this line is not present, then \prog{makeindex}
 % has not been called; this happens when you didn't specify the shell
-% escape command line option for the \LaTeX{} run or the restricted
+% escape command line option for the \LaTeX\ run or the restricted
 % shell escape is not active; also, of course, if you set the
 % \texttt{noautomatic} option for the index.
 %
 % {\tolerance=9999
 % When using \prog{splitindex}, the situation is different. During the
-% \LaTeX{} run, only a large index file called \texttt{mybook.idx} file
+% \LaTeX\ run, only a large index file called \texttt{mybook.idx} file
 % gets written; the first \cs{printindex} command will call
 % \prog{splitindex} (unrestricted shell escape \emph{must} be active),
 % which will produce the two partial index files \texttt{mybook-mybook.idx}
@@ -507,12 +561,12 @@ and the derived files indextools.sty and indextools.pdf.
 % &              & mybook-secondary.ilg \\
 % \bottomrule
 % \end{tabular}\endgroup
-% \caption{Files written during a \LaTeX{} run}\label{tab:files}
+% \caption{Files written during a \LaTeX\ run}\label{tab:files}
 % \end{table}
 %
-% Everything is the same when using \prog{texindy} for alphabetizing,
+% Everything is the same when using \prog{texindy} for alphabetising,
 % except that, by default, it doesn't write \texttt{.ilg} files. If
-% you want them, add |options=-t|\meta{name}|.ilg| to the relevant
+% you want them, add |options=-t |\meta{name}|.ilg| to the relevant
 % \cs{makeindex} command, in our example it should be
 %\begin{verbatim}
 % \makeindex[...,options=-t mybook.ilg]
@@ -534,7 +588,7 @@ and the derived files indextools.sty and indextools.pdf.
 % if you specify a style option for \prog{makeindex} such as
 % |options=-s mystyle.ist| and the style file is missing or its name
 % is mistyped, the run of \prog{makeindex} will result in
-% \texttt{mybook.log}, but it will be aborted and the \TeX{} program
+% \texttt{mybook.log}, but it will be aborted and the \TeX\ program
 % has no control over this process. In this case the \texttt{.ilg} and
 % \texttt{.ind} files will not be produced and you can spot the
 % problem by checking the time stamps. On some systems a message such as
@@ -549,10 +603,10 @@ and the derived files indextools.sty and indextools.pdf.
 % Shell hackers may be able to redirect the \texttt{stderr} stream to
 % a file, but this requires skills that can't be explained here,
 % because they require tens of different tricks, depending on what
-% method is used to start a \LaTeX{} run. From the command line,
+% method is used to start a \LaTeX\ run. From the command line,
 % assuming \prog{bash}, it would be something like
 %\begin{verbatim}
-% pdflatex -shell-escape mybook.tex 2>latex-errors
+% pdflatex --shell-escape mybook.tex 2>latex-errors
 %\end{verbatim}
 % If shell hackers know a way to access the exit status of the called
 % program, we'd be glad to implement a supplementary check.
@@ -573,7 +627,7 @@ and the derived files indextools.sty and indextools.pdf.
 % between the index title, the prologue and the index body.
 % 
 % This facility relies on a particular feature of the |multicols|
-% environment, that \pack{imakeidx} uses to instruct the typesetting
+% environment, that \pack{indextools} uses to instruct the typesetting
 % program to typeset the index with a specified number of balanced columns.
 % The choice of |multicols| has been made because it balances the
 % columns in the last page; the declaration |\twocolum| does not
@@ -581,11 +635,12 @@ and the derived files indextools.sty and indextools.pdf.
 % the index in two-column mode with an unbalanced last column.
 %
 % In the previous sections it has been clearly stated that any
-% configuration of the way \pack{imakeidx} typesets the indices
+% configuration of the way \pack{indextools} typesets the indices
 % is bypassed if the option \opz{original} has been specified
 % either explicitly or implicitly. It is implicitly specified
 % if the option \opz{twocolumn} is specified in the class
 % declaration statement.
+%
 % Why? Because if two column typesetting is desired for the whole
 % document, it is not clear if the index has to be typeset in one
 % column within each column of the document, or if it should be
@@ -595,7 +650,7 @@ and the derived files indextools.sty and indextools.pdf.
 % Furthermore the |\onecolum| command forces a page break; without
 % the |\onecolumn| command if the index is treated as a  chapter,
 % there is a page break, while if it is configured to be typeset
-% as a section there is no forced page brake. With this plethora
+% as a section there is no forced page break. With this plethora
 % of combinations we decided to avoid any configuration of the
 % index typesetting and left the decision to the user. This
 % requires the user to practice some ingenuity in order to obtain
@@ -603,18 +658,18 @@ and the derived files indextools.sty and indextools.pdf.
 %
 % First of all the user shall not specify the \opz{twocolumn}
 % option to the class. Secondly the user asks for the use of
-% \pack{imakeidx} and sets up the single or multiple |\makindex|
+% \pack{indextools} and sets up the single or multiple |\makindex|
 % commands. thirdly he loads all other packages required for his
 % document; possibly he uses also \pack{geometry} in order to
 % specify a specific page layout. He shall specify the |\twocolumn|
 % declaration after the above has been completed, in any case
-% after the \pack{imakeidx} package has been loaded and the single
+% after the \pack{indextools} package has been loaded and the single
 % or multiple |\makeindex| commands are configured.
 %
 % A good example might be this one:
 %\begin{verbatim}
 %\documentclass[a4paper,11pt]{book}
-%\usepackage{imakeidx}
+%\usepackage{indextools}
 %\indexsetup{level=\section*,toclevel=section,noclearpage}
 %\makeindex[title=Index of places,columns=1]
 %\twocolumn
@@ -640,7 +695,7 @@ and the derived files indextools.sty and indextools.pdf.
 % On the opposite the following code:
 %\begin{verbatim}
 %\documentclass[a4paper,11pt]{book}
-%\usepackage{imakeidx}
+%\usepackage{indextools}
 %\makeindex[title=Index of places,columns=2]
 %\twocolumn
 %\usepackage[T1]{fontenc}
@@ -677,38 +732,40 @@ and the derived files indextools.sty and indextools.pdf.
 %
 % \subsubsection{Package \pack{showidx}} 
 %
-% Up to version 1.1 this package did not allow to use it together with the \pack{showidx}
-% package; now it is, provided that \pack{showidx} is loaded \emph{before} \pack{imakeidx}.
-% See below more information on using \pack{showidx}.
+% Up to version 1.1 this package did not allow to use it together with
+% the \pack{showidx} package; now it is, provided that \pack{showidx}
+% is loaded \emph{before} \pack{indextools}. See below more information
+% on using \pack{showidx}.
 %
 % \subsubsection{Package \pack{fancyhdr}}
 % 
-% When using package \pack{fancyhdr} some inconveniences did show up; now we believe
-% we have detected the causes and we implemented the necessary corrections\footnote{Thanks
-% to Maïeul Rouquette, who spotted the problems and also suggested some patches.}.
+% When using package \pack{fancyhdr} some inconveniences did show up;
+% now we believe we have detected the causes and we implemented the
+% necessary corrections\footnote{Thanks to Maïeul Rouquette who, before
+% creating this fork, spotted the problems and suggested some patches.}.
 %
 % \subsubsection{Package \pack{combine}}
 %
-% Apparently there might be some conflicts with package \pack{combine}, because this
-% package redefines the contents of |\jobname|; we tried to control this behavior,
-% and made the necessary patches, but it is still necessary to load this
-% package \pack{imakeidx} \emph{before} package \pack{combine}.
+% Apparently there might be some conflicts with package \pack{combine},
+% because this package redefines the contents of |\jobname|; we tried
+% to control this behaviour, and made the necessary patches, but it is still
+% necessary to load this package \pack{indextools} \emph{before} package
+% \pack{combine}.
 %
 % \subsubsection{Package \pack{ledmac}}
 %
-% Some users reported some conflicts with package \pack{ledmac}; in order to mark
-% with an italic `n' the pages where the reference was made in one of the footnotes,
-% it is necessary to use the package \pack{etoolbox} and its command |\pretocmd|;
-% actually it is not necessary to load \pack{etoolbox}, because this \pack{imakeidx}
-% provides for it:
+% Some users reported some conflicts with package \pack{ledmac}; in order
+% to mark with an italic `n' the pages where the reference was made in
+% one of the footnotes, it is necessary to use the package \pack{etoolbox}
+% and its command |\pretocmd|; actually it is not necessary to load
+% \pack{etoolbox}, because this \pack{indextools} package provides for it:
 %\begin{verbatim}
 %...
 %\usepackage{letltxmacro}
-%\usepackage{imakeidx}
+%\usepackage{indextools}
 %...
 %\makeatletter
 %\LetLtxMacro\orig@@index\index
-%\let\orig@@index\index
 %\newcommand\nindex[1]{\orig@@index{#1|innote}}
 %\newcommand\innote[1]{#1\textit{n}}
 %...
@@ -718,12 +775,28 @@ and the derived files indextools.sty and indextools.pdf.
 %    \pretocommand{\@footnotetext}{\let\index\nindex}{}{}
 %}
 %\end{verbatim}
-% We did not apply this patch directly because we tried to avoid possible conflicts
-% that might show up when loading other packages. Therefore we simply show what
-% to do in case it might be necessary.
-
+% We did not apply this patch directly because we tried to avoid possible
+% conflicts that might show up when loading other packages. Therefore we
+% simply show what to do in case it might be necessary.
 %
-%\subsection{Index layout customization}
+% With the newer \pack{eledmac} package there are no problems.
+%
+% \subsection{Conflict with the \pack{bidi} package}
+% A strange conflict was discovered between packages \pack{imakeidx} and
+% \pack{bidi}, in order to let \pack{hyperref} redefine some
+% internal macros so as to have index hyperlinks properly executed.
+% This implies that the ``index'' package be loaded before \pack{hyperref};
+% on the opposite \pack{bidi} (for bidirectional writing, needed for
+% typesetting Arabic and Hebrew scripts, among other ones) \emph{must}
+% be loaded after \pack{hyperref} and redefines some hyper commands
+% that have influence on the indexing package; therefore after loading
+% \pack{bidi} the previous redefinitions are lost. A solution was found
+% by modifying the definition of the environment |theindex| and delaying
+% its definition to the execution of |\begin{document}|. This is the main
+% reason of this fork so that \pack{indextools} may be loaded, as most
+% packages normally do, before \pack{hyperref}.
+%
+%\subsection{Index layout customisation}
 % If you redefine yourself the \texttt{theindex} environment, please
 % remember not to number the chapter or section that introduces the
 % index if you ask for the \Kvalue{intoc} option; either use the
@@ -733,27 +806,28 @@ and the derived files indextools.sty and indextools.pdf.
 % commands, that will put the index titles directly into the table of
 % contents. See below the effect of the |\backmatter| declaration.
 % You may use the \pack{idxlayout} package by Thomas Titz,
-% which offers many functions for index typesetting customization and
+% which offers many functions for index typesetting customisation and
 % is compatible with our package; remember to load \pack{idxlayout}
-% after \pack{imakeidx}. This package has a similar function to our
+% after \pack{indextools}. This package has a similar function to our
 % \cs{indexprologue}, called \cs{setindexprenote}; however
 % \pack{idxlayout} doesn't reset the index prologue, which must be
 % declared anew or disabled with \cs{noindexprenote} before the next
 % \cs{printindex} command. In any case take into serious consideration
-% what is being said hereafter about customizations.
+% what is being said hereafter about customisation.
 %
-% \subsection{Index page customization}
-% The same, more or less, holds true if you customize your headings;
-% \pack{imakeidx} can deal with standard settings, but it generally
-% cannot deal with personal stylings and customizations. This is why
+% \subsection{Index page customisation}
+% The same, more or less, holds true if you customise your headings;
+% \pack{indextools} can deal with standard settings, but it generally
+% cannot deal with personal styles and customisations. This is why
 % if you load \pack{fancyhdr}, some of the |\indexsetup| settings may be
 % disabled.
 
-% When you make any kind of customization, remember that there are
+% When you make any kind of customisation, remember that there are
 % several classes, or personal settings, or features that may render your
-% customization very difficult to handle. Typically:
+% customisation very difficult to handle. Typically:
 %^^A
 %\begin{itemize}
+%^^A
 % \item There are classes where the normal usable highest sectioning
 % command, disregarding |\part|, is not |\chapter|, but |\section|; for
 % example classes \class{article}, \class{scrartcl}.
@@ -766,7 +840,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \item There are some classes (for example \class{book},
 % \class{scrbook}, \class{menoir},\dots) that have the special
 % ``sectioning'' declarations |\frontmatter|, |\mainmatter|, and
-% |\backmatter| modify how the unstarred sectioning commands behave for
+% |\backmatter| which modify how the unstarred sectioning commands behave for
 % what concerns the heading and the table of contents entries.
 %
 % For what concerns indices, these are generally typeset at the document
@@ -791,22 +865,22 @@ and the derived files indextools.sty and indextools.pdf.
 % brace balanced strings that may be used in different ways by the selected page
 % style and by the page style definitions of the macros |\chaptermarks|,
 % |\sectionmarks|, and |\subsectionmarks| that may interfere with personal
-% customizations.
+% customisations.
 %^^A
 % \item Remember also that things change in an obvious way when one side
 % typesetting is chosen; all pages are treated as if they were odd ones;
-% therefore any customization must take into account also this aspect.
+% therefore any customisation must take into account also this aspect.
 %\end{itemize}
 %
-% The above list has not been written down for discouraging customizations
+% The above list has not been written down for discouraging customisations
 % of any kind: simply it recalls what must be taken care of in order to
-% create one's customization in a proper way.
+% create one's customisation in a proper way.
 %
 % The above list explains why we disabled the commands tied to the
 % |\indexsetup| keys \Kvalue{headings} and \Kvalue{firstpagestyle} when
 % package \pack{fancydr} is being used; you may even set up these keys,
 % but if the \pack{fancyhdr} package has been loaded, we disable their
-% action; this implies that any fancy customization must be done before
+% action; this implies that any fancy customisation must be done before
 % starting to print any index.
 %
 % The \Kvalue{intoc} option must also be used with care, as well as the starred
@@ -815,7 +889,7 @@ and the derived files indextools.sty and indextools.pdf.
 % possible |\backmatter| declaration sets up, in order to avoid double
 % entries in the table of contents; the |\backmatter| settings may also
 % influence the way heading information is being used, and this makes it
-% even more stringent to set up any index page style customization
+% even more stringent to set up any index page style customisation
 % before starting to print any index.
 %
 % Therefore if by chance you get double entries into the table of contents,
@@ -829,7 +903,7 @@ and the derived files indextools.sty and indextools.pdf.
 % If you redefine your \texttt{theindex} environment by means of other
 % packages, pay attention that these redefine a real \texttt{theindex}
 % environment with this very name; if they create an environment with
-% a different name, \pack{imakeidx} can't take care of the indices
+% a different name, \pack{indextools} can't take care of the indices
 % production (in particular the \TeX\ system program \prog{makeindex}
 % creates a sorted and formatted \texttt{.ind} file that refers
 % explicitly to the \texttt{theindex} environment), and it can't take
@@ -837,48 +911,52 @@ and the derived files indextools.sty and indextools.pdf.
 % link anchors needed to navigate your document by means of hyper
 % links.
 %
-% \subsection{Index location customization}
+% \subsection{Index location customisation}
 %
-% Some packages might want to use the facilities of \emph{imakeidx} to offer customized 
-% index commands, where the entry location is not expressed by a page number, 
-% but by an other reference value (for example: line number, entry number, etc.).
+% Some packages might want to use the facilities of \emph{indextools}
+% to offer customised index commands, where the entry location is not
+% expressed by a page number, but by an other reference value (for
+% example: line number, entry number, etc.).
 %
-% These packages may use the low-level command \cs{imki@wrindexentry} which takes three arguments:
+% These packages may use the low-level command \cs{indtl@wrindexentry}
+% which takes three arguments:
 % \begin{enumerate}
 % 	\item The index name.
 % 	\item The entry.
 % 	\item The location number.
 % \end{enumerate}
-% For example \verb+\imki@wrindexentry{names}{Charles}{26}+ adds to the index \verb+names+
-% the value \verb+Charles+ with the location reference \verb+26+.
+% For example \verb+\indtl@wrindexentry{names}{Charles}{26}+ adds to
+% the index \verb+names+ the value \verb+Charles+ with the location
+% reference \verb+26+.
 %
-% In simpler words, the new command \cs{imki@wrindexentry} is of interest mainly to package
-% and class authors; it is not to be used by the ``normal'' user, who, on the opposite,
-% if interested in referencing the index entries on some location counter different
-% from the page one, is urged to refer to the classes and packages that implement this
-% facility; \pack{eledmac} should be one of these packages. Matter of fact this addition
-% to the \pack{imakeidx} package was contributed by Maïeul Rouquette, the author
-% and maintainer of \pack{eledmac}, and we thank him very much,
+% In simpler words, the new command \cs{indtl@wrindexentry} is of interest
+% mainly to package and class authors; it is not to be used by the
+% ``normal'' user, who, on the opposite, if interested in referencing
+% the index entries on some location counter different from the page one,
+% is urged to refer to the classes and packages that implement this
+% facility; \pack{eledmac} should be one of these packages. Matter of
+% fact this addition to the \pack{indextools} package was contributed
+% by Maïeul Rouquette, the author and maintainer of \pack{eledmac}.
 %
 % \subsection{Using the \textsf{showidx} package}
 % If you want to make use of the \pack{showidx} facilities, remember
-% to load that package \emph{before} \pack{imakeidx}; remember also
+% to load that package \emph{before} \pack{indextools}; remember also
 % to disable or comment out the call to \pack{showidx} when you
 % typeset the final version of your document. This constraint is due
 % to the fact that \pack{showidx} redefines several internal commands,
-% some of which have to receive the \pack{imakeidx} definition in order
+% some of which have to receive the \pack{indextools} definition in order
 % to perform as described in this documentation.
 
-% At the same time if the \pack{memoir} class is being used, remember that this class
-% simulates the \pack{showidx} package and has its own commands to enable or
-% disable the printing of the index entries into the margin of the document;
-% the default setting is with the |\hideindexmarks| command in force; but if
-% the user wants to write his index entries in the margin he has to issue the
-% declaration |\showindexmarks| just after begin document, in any case before
-% the part of the source file(s) he wants to be marked with the index entries
-% in the margin.
+% At the same time if the \pack{memoir} class is being used, remember that
+% this class simulates the \pack{showidx} package and has its own commands
+% to enable or disable the printing of the index entries into the margin
+% of the document; the default setting is with the |\hideindexmarks|
+% command in force; but if the user wants to write his index entries in
+% the margin he has to issue the declaration |\showindexmarks| just after
+% begin document, in any case before the part of the source file(s) he
+% wants to be marked with the index entries in the margin.
 %
-% \subsection{Index List sectioning customization}
+% \subsection{Index List sectioning customisation}
 % Use freely the options and the key values in order to reach the
 % desired results, but you are advised to prepare in advance the
 % styles for composing the various indices in a proper way; for
@@ -946,7 +1024,7 @@ and the derived files indextools.sty and indextools.pdf.
 %
 % Notice that in order to create a specific name space so as to avoid
 % possible conflicts with other packages, all the commands defined in
-% this package are prefixed with the string \texttt{imki@}.
+% this package are prefixed with the string \texttt{indtl@}.
 %\iffalse
 %<*package>
 %\fi
@@ -969,44 +1047,44 @@ and the derived files indextools.sty and indextools.pdf.
 % \cs{directlua}; now we leave the check to \pack{ifluatex}; using
 % also \pack{ifxetex} for symmetry.}
 %    \begin{macrocode}
-\DeclareOption{xindy}{\def\imki@progdefault{texindy}}
-\DeclareOption{texindy}{\def\imki@progdefault{texindy}}
-\DeclareOption{truexindy}{\def\imki@progdefault{truexindy}}
-\DeclareOption{makeindex}{\def\imki@progdefault{makeindex}}
-\newif\ifimki@disableautomatic
-\DeclareOption{noautomatic}{\imki@disableautomatictrue}
-\newif\ifimki@nonewpage
+\DeclareOption{xindy}{\def\indtl@progdefault{texindy}}
+\DeclareOption{texindy}{\def\indtl@progdefault{texindy}}
+\DeclareOption{truexindy}{\def\indtl@progdefault{truexindy}}
+\DeclareOption{makeindex}{\def\indtl@progdefault{makeindex}}
+\newif\ifindtl@disableautomatic
+\DeclareOption{noautomatic}{\indtl@disableautomatictrue}
+\newif\ifindtl@nonewpage
 \DeclareOption{nonewpage}{%
-  \imki@nonewpagetrue\imki@disableautomatictrue
+  \indtl@nonewpagetrue\indtl@disableautomatictrue
 }
-\newif\ifimki@splitindex
-\DeclareOption{splitindex}{\imki@splitindextrue}
-\newif\ifimki@original
-\DeclareOption{original}{\imki@originaltrue}
+\newif\ifindtl@splitindex
+\DeclareOption{splitindex}{\indtl@splitindextrue}
+\newif\ifindtl@original
+\DeclareOption{original}{\indtl@originaltrue}
 \DeclareOption{quiet}{\AtEndOfPackage{%
-  \let\imki@finalmessage\@gobble
-  \let\imki@splitindexmessage\relax}}
+  \let\indtl@finalmessage\@gobble
+  \let\indtl@splitindexmessage\relax}}
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
 
-\if@twocolumn\imki@originaltrue\fi
-\def\imki@exec{\immediate\write18}
-\def\imki@engine{(pdf)latex}
+\if@twocolumn\indtl@originaltrue\fi
+\def\indtl@exec{\immediate\write18}
+\def\indtl@engine{(pdf)latex}
 \RequirePackage{ifxetex,ifluatex}
-\ifxetex\def\imki@engine{xelatex}\fi
+\ifxetex\def\indtl@engine{xelatex}\fi
 \ifluatex % luatex doesn't have \(pdf)shellescape
- \def\imki@engine{lualatex}
+ \def\indtl@engine{lualatex}
   \ifnum\luatexversion<68
-    \chardef\imki@shellescape\@ne % no way to know the value
+    \chardef\indtl@shellescape\@ne % no way to know the value
   \else
     \RequirePackage{pdftexcmds} % provides \pdf@shellescape
-    \chardef\imki@shellescape\pdf@shellescape
+    \chardef\indtl@shellescape\pdf@shellescape
   \fi
-  \let\imki@exec\pdf@system
+  \let\indtl@exec\pdf@system
 \fi
 \RequirePackage{xpatch}
-\edef\imki@splitindexoptions{-m \string"\string"}
-\def\splitindexoptions#1{\g@addto@macro\imki@splitindexoptions{ #1}}
+\edef\indtl@splitindexoptions{-m \string"\string"}
+\def\splitindexoptions#1{\g@addto@macro\indtl@splitindexoptions{ #1}}
 \@onlypreamble\splitindexoptions
 %    \end{macrocode}
 %
@@ -1031,13 +1109,24 @@ and the derived files indextools.sty and indextools.pdf.
 % with their commands, that are substantially the same as those used
 % here. By so doing those packages are inhibited from being loaded
 % after this one.
+% We do the same with the forked original \pack{imakeidx} package
+% so that if \pack{imakeidx} is loaded before \pack{indextools} is
+% not loaded, but an error message is issued; otherwise we fake the
+% fact that \pack{imakeidx} has already been loaded so that it does
+% not get reloaded.
 %    \begin{macrocode}
 \@namedef{ver@makeidx.sty}{3000/12/31}
 \@ifpackageloaded{multind}
-  {\PackageError{imakeidx}{Incompatible package `multind' loaded}
+  {\PackageError{indextools}{Incompatible package `multind' loaded}
     {This package is incompatible with multind, don't load both.%
      \MessageBreak\@ehc}}
   {\@namedef{ver@multind.sty}{3000/12/31}}
+
+\@ifpackageloaded{imakeidx}
+  {\PackageError{indextools}{Incompatible package `imakeidx' loaded}
+    {This package is incompatible with imakeidx, don't load both.%
+     \MessageBreak\@ehc}}
+  {\@namedef{ver@imakeidx.sty}{3000/12/31}}
 %    \end{macrocode}
 % At the same time we redefine some commands defined by \pack{makeidx}
 % and we define the default English names for the \cs{see} and
@@ -1059,7 +1148,7 @@ and the derived files indextools.sty and indextools.pdf.
 % end of package.
 %    \begin{macrocode}
 \providecommand*\makeindex{} % to use \renewcommand safely
-\renewcommand{\makeindex}[1][]{\imki@makeindex{#1}}
+\renewcommand{\makeindex}[1][]{\indtl@makeindex{#1}}
 % \@onlypreamble\makeindex % Already in latex.ltx
 %    \end{macrocode}
 % This package implementation of \cs{makeindex} sets default values
@@ -1067,90 +1156,90 @@ and the derived files indextools.sty and indextools.pdf.
 % argument to \cs{makeindex}) and calls two other macros. After that
 % we have to reset the defaults.
 %    \begin{macrocode}
-\def\imki@makeindex#1{%
-  \edef\imki@name{\jobname}%
-  \edef\imki@jobname{\jobname}%
-  \def\imki@title{\indexname}%
-  \edef\imki@program{\imki@progdefault}%
-  \let\imki@options\space
-  \KV@imki@noautomaticfalse\KV@imki@intocfalse
+\def\indtl@makeindex#1{%
+  \edef\indtl@name{\jobname}%
+  \edef\indtl@jobname{\jobname}%
+  \def\indtl@title{\indexname}%
+  \edef\indtl@program{\indtl@progdefault}%
+  \let\indtl@options\space
+  \KV@indtl@noautomaticfalse\KV@indtl@intocfalse
   \setkeys{imki}{#1}%
-  \ifimki@splitindex\KV@imki@noautomaticfalse\fi
-  \imki@build\imki@name
-  \imki@startidx\imki@name
-  \imki@resetdefaults
+  \ifindtl@splitindex\KV@indtl@noautomaticfalse\fi
+  \indtl@build\indtl@name
+  \indtl@startidx\indtl@name
+  \indtl@resetdefaults
 }
 %    \end{macrocode}
 %
-% Here are the keys. As usual, the \texttt{imki@} prefix is used to
+% Here are the keys. As usual, the \texttt{indtl@} prefix is used to
 % distinguish anything that is being defined in this package, even the
 % keys.
 %    \begin{macrocode}
-\define@key{imki}{name}{\def\imki@name{#1}}
-\define@key{imki}{title}{\def\imki@title{#1}}
-\define@choicekey{imki}{program}[\imki@val\imki@nr]
+\define@key{imki}{name}{\def\indtl@name{#1}}
+\define@key{imki}{title}{\def\indtl@title{#1}}
+\define@choicekey{imki}{program}[\indtl@val\indtl@nr]
   {makeindex,xindy,texindy,truexindy}{%
-    \ifcase\imki@nr\relax
-      \def\imki@program{makeindex}%
+    \ifcase\indtl@nr\relax
+      \def\indtl@program{makeindex}%
     \or
-      \def\imki@program{texindy}%
+      \def\indtl@program{texindy}%
     \or
-      \def\imki@program{texindy}%
+      \def\indtl@program{texindy}%
     \or
-      \def\imki@program{xindy}%
+      \def\indtl@program{xindy}%
     \fi}
-\define@key{imki}{options}{\def\imki@options{ #1 }}
+\define@key{imki}{options}{\def\indtl@options{ #1 }}
 \define@boolkey{imki}{noautomatic}[true]{}
 \define@boolkey{imki}{intoc}[true]{}
-\define@key{imki}{columns}{\def\imki@columns{#1}}
-\define@key{imki}{columnsep}{\def\imki@columnsep{#1}}
+\define@key{imki}{columns}{\def\indtl@columns{#1}}
+\define@key{imki}{columnsep}{\def\indtl@columnsep{#1}}
 \define@boolkey{imki}{columnseprule}[true]{}
-\def\imki@resetdefaults{%
-  \def\imki@options{ }%
-  \def\imki@columns{2}\def\imki@columnsep{35\p@}%
-  \KV@imki@columnseprulefalse
-  \KV@imki@intocfalse\KV@imki@noautomaticfalse}
-\imki@resetdefaults
+\def\indtl@resetdefaults{%
+  \def\indtl@options{ }%
+  \def\indtl@columns{2}\def\indtl@columnsep{35\p@}%
+  \KV@indtl@columnseprulefalse
+  \KV@indtl@intocfalse\KV@indtl@noautomaticfalse}
+\indtl@resetdefaults
 %    \end{macrocode}
 %
-% The control sequence \cs{imki@build} defines a control sequence to
+% The control sequence \cs{indtl@build} defines a control sequence to
 % hold the setup for an index to be used when the index is sorted and
 % printed
 %    \begin{macrocode}
-\def\imki@build#1{%
+\def\indtl@build#1{%
   \toks@{}%
-  \imki@dokey\imki@title
-  \imki@dokey\imki@program
-  \imki@dokey\imki@options
-  \imki@dokey\imki@columns
-  \imki@dokey\imki@columnsep
-  \ifKV@imki@noautomatic
-    \addto@hook\toks@{\KV@imki@noautomatictrue}%
+  \indtl@dokey\indtl@title
+  \indtl@dokey\indtl@program
+  \indtl@dokey\indtl@options
+  \indtl@dokey\indtl@columns
+  \indtl@dokey\indtl@columnsep
+  \ifKV@indtl@noautomatic
+    \addto@hook\toks@{\KV@indtl@noautomatictrue}%
   \else
-    \addto@hook\toks@{\KV@imki@noautomaticfalse}%
+    \addto@hook\toks@{\KV@indtl@noautomaticfalse}%
   \fi
-  \ifKV@imki@intoc
-    \addto@hook\toks@{\KV@imki@intoctrue}%
+  \ifKV@indtl@intoc
+    \addto@hook\toks@{\KV@indtl@intoctrue}%
   \else
-    \addto@hook\toks@{\KV@imki@intocfalse}%
+    \addto@hook\toks@{\KV@indtl@intocfalse}%
   \fi
-  \ifKV@imki@columnseprule
-    \addto@hook\toks@{\KV@imki@columnsepruletrue}%
+  \ifKV@indtl@columnseprule
+    \addto@hook\toks@{\KV@indtl@columnsepruletrue}%
   \else
-    \addto@hook\toks@{\KV@imki@columnseprulefalse}%
+    \addto@hook\toks@{\KV@indtl@columnseprulefalse}%
   \fi
-  \expandafter\edef\csname imki@set@#1\endcsname{\the\toks@}%
+  \expandafter\edef\csname indtl@set@#1\endcsname{\the\toks@}%
 }
 %    \end{macrocode}
-% Comand \cs{imki@dokey} receives as argument the text of the values
+% Comand \cs{indtl@dokey} receives as argument the text of the values
 % assigned to certain keys, and adds them to the options token list.
 %    \begin{macrocode}
-\def\imki@dokey#1{%
+\def\indtl@dokey#1{%
   \expandafter\addto@hook\expandafter\toks@\expandafter{%
     \expandafter\def\expandafter#1\expandafter{#1}}}
 %    \end{macrocode}
 %
-% Command \cs{imki@startidx} defines the output stream(s); the macro
+% Command \cs{indtl@startidx} defines the output stream(s); the macro
 % with suffix \texttt{split} is used when \Kvalue{splitindex} is not
 % enabled, the one with suffix \texttt{unique} is used otherwise.  In
 % the case of many indices, the symbolic name for an index named
@@ -1159,10 +1248,10 @@ and the derived files indextools.sty and indextools.pdf.
 % output stream is called \cs{@indexfile} as in standard \LaTeX,
 % corresponding to \cs{jobname.idx}.
 %    \begin{macrocode}
-\def\imki@startidxsplit#1{%
+\def\indtl@startidxsplit#1{%
   \if@filesw
     \def\index{\@bsphack
-      \@ifnextchar [{\@index}{\@index[\imki@jobname]}}
+      \@ifnextchar [{\@index}{\@index[\indtl@jobname]}}
     \expandafter\newwrite\csname #1@idxfile\endcsname
     \immediate\openout \csname #1@idxfile\endcsname #1.idx\relax
     \typeout{Writing index file #1.idx}%
@@ -1171,16 +1260,16 @@ and the derived files indextools.sty and indextools.pdf.
 % We define a switch which is set to true when a \cs{makeindex} command is given:
 % with \Kvalue{splitindex} we open only one stream.
 %    \begin{macrocode}
-\newif\ifimki@startedidx
-\def\imki@startidxunique#1{%
+\newif\ifindtl@startedidx
+\def\indtl@startidxunique#1{%
   \if@filesw
-    \ifimki@startedidx\else
+    \ifindtl@startedidx\else
       \newwrite\@indexfile
-      \immediate\openout\@indexfile\imki@jobname.idx%
-      \global\imki@startedidxtrue
+      \immediate\openout\@indexfile\indtl@jobname.idx%
+      \global\indtl@startedidxtrue
     \fi
     \def\index{\@bsphack
-      \@ifnextchar [{\@index}{\@index[\imki@jobname]}}
+      \@ifnextchar [{\@index}{\@index[\indtl@jobname]}}
     \expandafter\let\csname #1@idxfile\endcsname\@empty
     \typeout{Started index file #1}%
  \fi}
@@ -1200,61 +1289,67 @@ and the derived files indextools.sty and indextools.pdf.
 \renewcommand{\index}[2][]{\@bsphack\@esphack}
 \def\@index[#1]{%
   \@ifundefined{#1@idxfile}%
-  {\PackageWarning{imakeidx}{Undefined index file `#1'}%
+  {\PackageWarning{indextools}{Undefined index file `#1'}%
    \begingroup
    \@sanitize
-   \imki@nowrindex}%
+   \indtl@nowrindex}%
   {\edef\@idxfile{#1}%
    \begingroup
    \@sanitize
    \@wrindex\@idxfile}}
-\def\imki@nowrindex#1{\endgroup\@esphack}
+\def\indtl@nowrindex#1{\endgroup\@esphack}
 %    \end{macrocode}
 %
-% Command \cs{@wrindex} must be duplicated; we have to call it the same as usual in order
-% to support \pack{hyperref}. But the real name will be given at the end. We have to
-% define a switch to allow the use of the \pack{showidx} facilities. We define also a
-% helper macro so as to do the right thing so as to show the index file name to which
-% a certain index entry is going to be written; the idea is to prefix the index entry
-% with the actual name of the specific index, except in the case or the default index,
-% where the name is set to |\jobname|. Since the control sequence is a primitive
-% command, its value cannot be directly compared in the |\ifx| sense to the current
-% macro represented by argument |#1|. Therefore we need a further helper control
-% sequence |\imki@jobname| that contains the value assigned to |\jobname|.
-% We must also take care of the case where the user wants to print the index entries
-% in the margin while working on the document. This implies testing for the package
-% \pack{showidx} being already loaded;  but this is not sufficient, because the
-% \pack{memoir} class simulates the \pack{showidx} package and the test would result
-% to be true even if the user did not load thet package, but uses the \pack{memoir} class.
-% Therefore we use the same boolean used by \pack{memoir}, testing in advance so as not
-% defining it twice; then we use it to let the \pack{showidx} true or simulated macros do
-% their job, but we also take care of resetting the switch default value to
-% false at begin document time if the \pack{memoir} class is being used. 
+% Command \cs{@wrindex} must be duplicated; we have to call it the same as
+% usual in order to support \pack{hyperref}. But the real name will be given
+% at the end. We have to define a switch to allow the use of the
+% \pack{showidx} facilities. We define also a helper macro so as to do the
+% right thing so as to show the index file name to which a certain index
+% entry is going to be written; the idea is to prefix the index entry with
+% the actual name of the specific index, except in the case or the default
+% index, where the name is set to |\jobname|. Since the control sequence is
+% a primitive command, its value cannot be directly compared in the |\ifx|
+% sense to the current macro represented by argument |#1|. Therefore we need
+% a further helper control sequence |\indtl@jobname| that contains the value
+% assigned to |\jobname|.
+%
+% We must also take care of the case where the user wants to print the index
+% entries in the margin while working on the document. This implies testing
+% for the package \pack{showidx} being already loaded;  but this is not
+% sufficient, because the \pack{memoir} class simulates the \pack{showidx}
+% package and the test would result to be true even if the user did not load
+% that package, but uses the \pack{memoir} class.
+%
+% Therefore we use the same boolean used by \pack{memoir}, testing in advance
+% so as not redefining it; then we use it to let the \pack{showidx} true or
+% simulated macros do their job, but we also take care of resetting the switch
+% default value to false at begin document time if the \pack{memoir} class is
+% being used. 
 %
 %
 %    \begin{macrocode}
 \@ifundefined{showindexmarks}{\newif\ifshowindexmark}{}
 \@ifpackageloaded{showidx}{\showindexmarktrue}{\showindexmarkfalse}
-\newcommand\imki@showidxentry[2]{%
+\newcommand\indtl@showidxentry[2]{%
   \ifshowindexmark
-    \@showidx{\ifdefequal{\imki@jobname}{#1}{}{[#1]\space}#2}%
+    \@showidx{\ifdefequal{\indtl@jobname}{#1}{}{[#1]\space}#2}%
   \fi}
-\newcommand\imki@wrindexentrysplit[3]{%
+\newcommand\indtl@wrindexentrysplit[3]{%
   \expandafter\protected@write\csname#1@idxfile\endcsname{}%
     {\string\indexentry{#2}{#3}}%
 }
-\newcommand\imki@wrindexentryunique[3]{%
+\newcommand\indtl@wrindexentryunique[3]{%
   \protected@write\@indexfile{}%
     {\string\indexentry[#1]{#2}{#3}}%
 }
-\def\imki@wrindexsplit#1#2{%
-	\imki@wrindexentrysplit{#1}{#2}{\thepage}%
-	\endgroup\imki@showidxentry{#1}{#2}%
+\def\indtl@wrindexsplit#1#2{%
+	\indtl@wrindexentrysplit{#1}{#2}{\thepage}%
+	\endgroup\indtl@showidxentry{#1}{#2}%
   \@esphack%
 }
-\def\imki@wrindexunique#1#2{%
-	\imki@wrindexentryunique{#1}{#2}{\thepage}%
-	\endgroup\imki@showidxentry{#1}{#2}%
+\def\indtl@wrindexunique#1#2{%
+	\indtl@wrindexentryunique{#1}{#2}{\thepage}%
+	\endgroup\indtl@showidxentry{#1}{#2}%
   \@esphack%
   }
 %    \end{macrocode}
@@ -1269,28 +1364,28 @@ and the derived files indextools.sty and indextools.pdf.
 % define an internal version of this command. In the case of
 % \prog{luatex} we can't emit the proper messages if \prog{luatex} is
 % not version 0.68 or later. The conditional
-% \cs{ifKV@imki@noautomatic} is defined by \cs{define@boolkey} above.
+% \cs{ifKV@indtl@noautomatic} is defined by \cs{define@boolkey} above.
 %
 %    \begin{macrocode}
-\def\imki@shellwarn{}
-\ifdefined\imki@shellescape % luatex
+\def\indtl@shellwarn{}
+\ifdefined\indtl@shellescape % luatex
 \else
   \@ifundefined{shellescape}
-    {\let\imki@shellescape\pdfshellescape} % pdftex
-    {\let\imki@shellescape\shellescape} % xetex
+    {\let\indtl@shellescape\pdfshellescape} % pdftex
+    {\let\indtl@shellescape\shellescape} % xetex
 \fi
-\ifnum\imki@shellescape=\z@
-  \let\KV@imki@noautomaticfalse\KV@imki@noautomatictrue
-  \KV@imki@noautomatictrue
-  \def\imki@shellwarn{\MessageBreak or call \imki@engine\space with
+\ifnum\indtl@shellescape=\z@
+  \let\KV@indtl@noautomaticfalse\KV@indtl@noautomatictrue
+  \KV@indtl@noautomatictrue
+  \def\indtl@shellwarn{\MessageBreak or call \indtl@engine\space with
     -shell-escape}
 \fi
 %    \end{macrocode}
 % Do the same if \Kvalue{noautomatic} has been given as an option.
 %    \begin{macrocode}
-\ifimki@disableautomatic
-  \let\KV@imki@noautomaticfalse\KV@imki@noautomatictrue
-  \KV@imki@noautomatictrue
+\ifindtl@disableautomatic
+  \let\KV@indtl@noautomaticfalse\KV@indtl@noautomatictrue
+  \KV@indtl@noautomatictrue
 \fi
 %    \end{macrocode}
 %
@@ -1304,75 +1399,77 @@ and the derived files indextools.sty and indextools.pdf.
 % Before doing so, though, we need to disable certain features if the
 % package \pack{fancyhdr} is loaded sometimes before the
 % |\begin{document| statement, be it before or after loading
-% \pack{imakeidx}. If that package is loaded we have to patch the
+% \pack{indextools}. If that package is loaded we have to patch the
 % definition of the environment |theindex|, because its default
 % commands interfere with those defined here that work perfectly
 % when \pack{fancyhdr} is not loaded. This patching could be defined
-% further on, but if it stay close to what has to be patched, it's
+% further on, but if it remains close to what has to be patched, it's
 % easier to understand it's operation.
 %
-% We make this redefinition at the begining of the document, to prevent redefinition by other package, like \pack{bidi}. This point is where \pack{indextools} and \pack{imakeidx} diverge.
+% We make this redefinition at the begining of the document, to
+% prevent redefinition by other packages, like \pack{bidi}. This
+% point is where \pack{indextools} and \pack{imakeidx} diverge.
 %    \begin{macrocode}
-\newif\ifimki@fancyhdr
+\newif\ifindtl@fancyhdr
 \AtBeginDocument{%
-  \@ifpackageloaded{fancyhdr}{\imki@fancyhdrtrue}{\imki@fancyhdrfalse}%
-    \ifimki@original
+  \@ifpackageloaded{fancyhdr}{\indtl@fancyhdrtrue}{\indtl@fancyhdrfalse}%
+    \ifindtl@original
      \expandafter\def\expandafter\theindex\expandafter{\expandafter
-        \imki@maybeaddtotoc\theindex}
+        \indtl@maybeaddtotoc\theindex}
     \else
       \renewenvironment{theindex}
-        {\imki@maybeaddtotoc
-         \imki@indexlevel{\indexname}%
-         \ifimki@fancyhdr\else%
-           \imki@indexheaders%
-           \thispagestyle{\imki@firstpagestyle}%
+        {\indtl@maybeaddtotoc
+         \indtl@indexlevel{\indexname}%
+         \ifindtl@fancyhdr\else%
+           \indtl@indexheaders%
+           \thispagestyle{\indtl@firstpagestyle}%
          \fi%
-         \ifnum\imki@columns>\@ne
-           \columnsep \imki@columnsep
-           \ifx\imki@idxprologue\relax
-             \begin{multicols}{\imki@columns}
+         \ifnum\indtl@columns>\@ne
+           \columnsep \indtl@columnsep
+           \ifx\indtl@idxprologue\relax
+             \begin{multicols}{\indtl@columns}
            \else
-             \begin{multicols}{\imki@columns}[\imki@idxprologue]
+             \begin{multicols}{\indtl@columns}[\indtl@idxprologue]
            \fi
          \else
-           \imki@idxprologue
+           \indtl@idxprologue
          \fi
-         \global\let\imki@idxprologue\relax
+         \global\let\indtl@idxprologue\relax
          \parindent\z@
          \parskip\z@ \@plus .3\p@\relax
-         \columnseprule \ifKV@imki@columnseprule.4\p@\else\z@\fi
+         \columnseprule \ifKV@indtl@columnseprule.4\p@\else\z@\fi
          \raggedright
          \let\item\@idxitem
-         \imki@othercode}
-        {\ifnum\imki@columns>\@ne\end{multicols}\fi
+         \indtl@othercode}
+        {\ifnum\indtl@columns>\@ne\end{multicols}\fi
     }
 \fi
 }
-\ifimki@original
+\ifindtl@original
 \else
-  \global\let\imki@idxprologue\relax
+  \global\let\indtl@idxprologue\relax
   \RequirePackage{multicol}
 \fi
 %    \end{macrocode}
 % The command \cs{indexsetup} may be used to customize some aspects of
 % index formatting.
 %    \begin{macrocode}
-\def\imki@indexlevel{%
+\def\indtl@indexlevel{%
   \@ifundefined{chapter}{\section}{\chapter}*}
-\define@key{imkiindex}{level}{\def\imki@indexlevel{#1}}
-\def\imki@toclevel{%
+\define@key{imkiindex}{level}{\def\indtl@indexlevel{#1}}
+\def\indtl@toclevel{%
   \@ifundefined{chapter}{section}{chapter}}
-\define@key{imkiindex}{toclevel}{\def\imki@toclevel{#1}}
-\define@boolkey{imkiindex}{noclearpage}[true]{\let\imki@clearpage\relax}
-\def\imki@indexheaders{%
+\define@key{imkiindex}{toclevel}{\def\indtl@toclevel{#1}}
+\define@boolkey{imkiindex}{noclearpage}[true]{\let\indtl@clearpage\relax}
+\def\indtl@indexheaders{%
   \@mkboth{\MakeUppercase\indexname}{\MakeUppercase\indexname}}
-\define@key{imkiindex}{headers}{\def\imki@indexheaders{\markboth#1}}
-\def\imki@firstpagestyle{plain}
-\define@key{imkiindex}{firstpagestyle}{\def\imki@firstpagestyle{#1}}
-\let\imki@othercode\relax
-\define@key{imkiindex}{othercode}{\def\imki@othercode{#1}}
+\define@key{imkiindex}{headers}{\def\indtl@indexheaders{\markboth#1}}
+\def\indtl@firstpagestyle{plain}
+\define@key{imkiindex}{firstpagestyle}{\def\indtl@firstpagestyle{#1}}
+\let\indtl@othercode\relax
+\define@key{imkiindex}{othercode}{\def\indtl@othercode{#1}}
 \newcommand{\indexsetup}[1]{%
-  \ifimki@original\else\setkeys{imkiindex}{#1}\fi}
+  \ifindtl@original\else\setkeys{imkiindex}{#1}\fi}
 \@onlypreamble\indexsetup
 %    \end{macrocode}
 %
@@ -1380,26 +1477,26 @@ and the derived files indextools.sty and indextools.pdf.
 % always \cs{let} to \cs{relax} during |\begin{theindex}|.
 %    \begin{macrocode}
 \newcommand{\indexprologue}[2][\bigskip]{%
-  \long\gdef\imki@idxprologue{{#2\par}#1}}
+  \long\gdef\indtl@idxprologue{{#2\par}#1}}
 %    \end{macrocode}
 %
 % Now we provide the relevant \cs{printindex} macros by transferring
-% the real job to a secondary macro \cs{imki@putindex} after due
+% the real job to a secondary macro \cs{indtl@putindex} after due
 % checks and messages.
 %    \begin{macrocode}
 \providecommand*{\printindex}{}
-\renewcommand*{\printindex}[1][\imki@jobname]{%
-  \@ifundefined{#1@idxfile}{\imki@error{#1}}{\imki@putindex{#1}}}
+\renewcommand*{\printindex}[1][\indtl@jobname]{%
+  \@ifundefined{#1@idxfile}{\indtl@error{#1}}{\indtl@putindex{#1}}}
 
-\def\imki@error#1{%
-  \def\@tempa{#1}\def\@tempb{\imki@jobname}%
+\def\indtl@error#1{%
+  \def\@tempa{#1}\def\@tempb{\indtl@jobname}%
   \ifx\@tempa\@tempb
-    \let\imki@optarg\@empty
+    \let\indtl@optarg\@empty
   \else
-    \def\imki@optarg{[#1]}%
+    \def\indtl@optarg{[#1]}%
   \fi
-  \PackageError{imakeidx}
-    {Misplaced \protect\printindex\imki@optarg}
+  \PackageError{indextools}
+    {Misplaced \protect\printindex\indtl@optarg}
     {You are not making this index, as no appropriate
      \protect\makeindex\MessageBreak
      command has been issued in the preamble.}}
@@ -1410,7 +1507,7 @@ and the derived files indextools.sty and indextools.pdf.
 % meaningful).  In case \cs{chapter} is defined but not
 % \cs{if@openright}, we assume that the class wants ``open right''.
 %    \begin{macrocode}
-\def\imki@clearpage{%
+\def\indtl@clearpage{%
   \@ifundefined{chapter}
     {\clearpage} % article and similar classes
     {\@ifundefined{if@openright}
@@ -1426,25 +1523,25 @@ and the derived files indextools.sty and indextools.pdf.
 % We need a helper macro to do a check in order to avoid a loop and
 % the hook where to insert the table of contents related stuff.
 %    \begin{macrocode}
-\def\imki@check@indexname{\indexname}
-\providecommand*\imki@maybeaddtotoc{}
+\def\indtl@check@indexname{\indexname}
+\providecommand*\indtl@maybeaddtotoc{}
 %    \end{macrocode}
 % Two helper macros for preparing the final messages to the user.
 %    \begin{macrocode}
-\def\imki@finalmessage#1{%
-  \expandafter\edef\csname imki@message#1\endcsname
-    {\imki@program\imki@options#1.idx}
-  \AtEndDocument{\PackageWarning{imakeidx}{%
-    Remember to run \imki@engine\space again after calling\MessageBreak
-    `\@nameuse{imki@message#1}'\imki@shellwarn\@gobble}}}
-\def\imki@splitindexmessage{%
-  \AtEndDocument{\PackageWarningNoLine{imakeidx}{%
-    Remember to run \imki@engine\space again after calling\MessageBreak
-    `splitindex' and processing the indices\imki@shellwarn}}}
+\def\indtl@finalmessage#1{%
+  \expandafter\edef\csname indtl@message#1\endcsname
+    {\indtl@program\indtl@options#1.idx}
+  \AtEndDocument{\PackageWarning{indextools}{%
+    Remember to run \indtl@engine\space again after calling\MessageBreak
+    `\@nameuse{indtl@message#1}'\indtl@shellwarn\@gobble}}}
+\def\indtl@splitindexmessage{%
+  \AtEndDocument{\PackageWarningNoLine{indextools}{%
+    Remember to run \indtl@engine\space again after calling\MessageBreak
+    `splitindex' and processing the indices\indtl@shellwarn}}}
 %    \end{macrocode}
 %
 % Here is a helper macro for deciding whether to call the external
-% utility or to issue a final message. In \cs{imki@makeindexname} we
+% utility or to issue a final message. In \cs{indtl@makeindexname} we
 % put the name of the only program allowed by default
 % (\prog{makeindex}). If the list is updated, we can supplement the
 % list here, maybe defining a list macro; for now this is
@@ -1452,18 +1549,18 @@ and the derived files indextools.sty and indextools.pdf.
 % automatic processing is possible, so that the main macro can take
 % the appropriate action.
 %    \begin{macrocode}
-\def\imki@makeindexname{makeindex}
-\def\imki@decide{%
+\def\indtl@makeindexname{makeindex}
+\def\indtl@decide{%
   \@tempswafalse
-  \ifimki@splitindex % splitindex is not "safe"
-    \ifnum\imki@shellescape=\@ne\@tempswatrue\fi
+  \ifindtl@splitindex % splitindex is not "safe"
+    \ifnum\indtl@shellescape=\@ne\@tempswatrue\fi
   \else
-    \ifx\imki@program\imki@makeindexname % nor is texindy
-      \ifnum\imki@shellescape=\tw@\@tempswatrue\fi
+    \ifx\indtl@program\indtl@makeindexname % nor is texindy
+      \ifnum\indtl@shellescape=\tw@\@tempswatrue\fi
     \fi
-    \ifnum\imki@shellescape=\@ne\@tempswatrue\fi
+    \ifnum\indtl@shellescape=\@ne\@tempswatrue\fi
   \fi
-  \ifKV@imki@noautomatic
+  \ifKV@indtl@noautomatic
     \@tempswafalse
   \fi}
 %    \end{macrocode}
@@ -1472,70 +1569,70 @@ and the derived files indextools.sty and indextools.pdf.
 % table of contents. It is duplicated as usual. The argument |#1| is
 % the specific symbolic name of the index.  In particular if the
 % \Kvalue{intoc} option has been specified, the hook
-% \cs{imki@maybeaddtotoc} is defined in such a way that the relevant
+% \cs{indtl@maybeaddtotoc} is defined in such a way that the relevant
 % information is added to the \texttt{toc} file. The
 % \cs{phantomsection} command is necessary when using \pack{hyperref};
 % here it is hidden as argument to \cs{@nameuse}, so it is equivalent
 % to \cs{relax} and does nothing if \pack{hyperref} has not been
 % loaded.
 %    \begin{macrocode}
-\def\imki@putindexsplit#1{%
-  \ifimki@nonewpage\else
-    \imki@clearpage
+\def\indtl@putindexsplit#1{%
+  \ifindtl@nonewpage\else
+    \indtl@clearpage
   \fi
   \immediate\closeout\csname #1@idxfile\endcsname
-  \let\imki@indexname\indexname % keep \indexname
-  \@nameuse{imki@set@#1}\imki@decide
+  \let\indtl@indexname\indexname % keep \indexname
+  \@nameuse{indtl@set@#1}\indtl@decide
   \if@tempswa % we can call the external program
-    \imki@exec{\imki@program\imki@options#1.idx}%
+    \indtl@exec{\indtl@program\indtl@options#1.idx}%
   \else
-    \imki@finalmessage{#1}%
+    \indtl@finalmessage{#1}%
   \fi
-  \ifKV@imki@intoc
-    \def\imki@maybeaddtotoc{\@nameuse{phantomsection}%
-      \addcontentsline{toc}{\imki@toclevel}{\imki@title}}%
+  \ifKV@indtl@intoc
+    \def\indtl@maybeaddtotoc{\@nameuse{phantomsection}%
+      \addcontentsline{toc}{\indtl@toclevel}{\indtl@title}}%
   \else
-    \def\imki@maybeaddtotoc{}%
+    \def\indtl@maybeaddtotoc{}%
   \fi
-  \ifx\imki@title\imki@check@indexname\else
-    \def\indexname{\imki@title}%
+  \ifx\indtl@title\indtl@check@indexname\else
+    \def\indexname{\indtl@title}%
   \fi
   \@input@{#1.ind}
-  \let\indexname\imki@indexname % restore \indexname
+  \let\indexname\indtl@indexname % restore \indexname
 }
 
-\newif\ifimki@splitdone
-\def\imki@putindexunique#1{%
-  \ifimki@nonewpage\else
-    \imki@clearpage
+\newif\ifindtl@splitdone
+\def\indtl@putindexunique#1{%
+  \ifindtl@nonewpage\else
+    \indtl@clearpage
   \fi
-  \let\imki@indexname\indexname % keep \indexname
-  \@nameuse{imki@set@#1}\imki@decide
+  \let\indtl@indexname\indexname % keep \indexname
+  \@nameuse{indtl@set@#1}\indtl@decide
   \if@tempswa % we can call the external program
-    \ifimki@splitdone\else
+    \ifindtl@splitdone\else
       \immediate\closeout\@indexfile
-      \imki@exec{splitindex \imki@splitindexoptions\space\imki@jobname.idx}%
-      \global\imki@splitdonetrue
+      \indtl@exec{splitindex \indtl@splitindexoptions\space\indtl@jobname.idx}%
+      \global\indtl@splitdonetrue
     \fi
   \else
-    \ifimki@splitdone\else
-      \imki@splitindexmessage\global\imki@splitdonetrue
+    \ifindtl@splitdone\else
+      \indtl@splitindexmessage\global\indtl@splitdonetrue
     \fi
   \fi
   \if@tempswa % we can call the external program
-    \imki@exec{\imki@program\imki@options\imki@jobname-#1.idx}%
+    \indtl@exec{\indtl@program\indtl@options\indtl@jobname-#1.idx}%
   \fi
-  \ifKV@imki@intoc
-    \def\imki@maybeaddtotoc{\@nameuse{phantomsection}%
-      \addcontentsline{toc}{\imki@toclevel}{\imki@title}}%
+  \ifKV@indtl@intoc
+    \def\indtl@maybeaddtotoc{\@nameuse{phantomsection}%
+      \addcontentsline{toc}{\indtl@toclevel}{\indtl@title}}%
   \else
-    \def\imki@maybeaddtotoc{}%
+    \def\indtl@maybeaddtotoc{}%
   \fi
-  \ifx\imki@title\imki@check@indexname\else
-    \def\indexname{\imki@title}%
+  \ifx\indtl@title\indtl@check@indexname\else
+    \def\indexname{\indtl@title}%
   \fi
-  \@input@{\imki@jobname-#1.ind}
-  \let\indexname\imki@indexname % restore \indexname
+  \@input@{\indtl@jobname-#1.ind}
+  \let\indexname\indtl@indexname % restore \indexname
 }
 %    \end{macrocode}
 %
@@ -1544,22 +1641,22 @@ and the derived files indextools.sty and indextools.pdf.
 % At this point, we choose the meaning of the relevant commands,
 % reclaiming the space occupied by the discarded ones
 %    \begin{macrocode}
-\ifimki@splitindex
-  \let\imki@startidx\imki@startidxunique
-  \let\@wrindex\imki@wrindexunique
-  \let\imki@putindex\imki@putindexunique
-  \let\imki@wrindexentry\imki@wrindexentryunique
-  \let\imki@startidxsplit\@undefined
-  \let\imki@wrindexsplit\@undefined
-  \let\imki@putindexsplit\@undefined
+\ifindtl@splitindex
+  \let\indtl@startidx\indtl@startidxunique
+  \let\@wrindex\indtl@wrindexunique
+  \let\indtl@putindex\indtl@putindexunique
+  \let\indtl@wrindexentry\indtl@wrindexentryunique
+  \let\indtl@startidxsplit\@undefined
+  \let\indtl@wrindexsplit\@undefined
+  \let\indtl@putindexsplit\@undefined
 \else
-  \let\imki@startidx\imki@startidxsplit
-  \let\@wrindex\imki@wrindexsplit
-  \let\imki@putindex\imki@putindexsplit
-  \let\imki@wrindexentry\imki@wrindexentrysplit
-  \let\imki@startidxunique\@undefined
-  \let\imki@wrindexunique\@undefined
-  \let\imki@putindexunique\@undefined
+  \let\indtl@startidx\indtl@startidxsplit
+  \let\@wrindex\indtl@wrindexsplit
+  \let\indtl@putindex\indtl@putindexsplit
+  \let\indtl@wrindexentry\indtl@wrindexentrysplit
+  \let\indtl@startidxunique\@undefined
+  \let\indtl@wrindexunique\@undefined
+  \let\indtl@putindexunique\@undefined
 \fi
 %    \end{macrocode}
 % To end the code, we deal with \pack{memoir}:
