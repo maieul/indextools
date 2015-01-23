@@ -1,4 +1,4 @@
-FILES = *sty *dtx *pdf README  makefile latexmkrc
+FILES =  *dtx *pdf README  makefile latexmkrc
 dist: indextools.pdf indextools.sty
 	@$(RM) ../indextools.zip
 	rm -rf indextools
