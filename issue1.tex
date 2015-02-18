@@ -9,25 +9,14 @@
 \makeindex[name=arabe, title={Index des mots arabes}]
 \usepackage{hyperref}
 
-\usepackage{polyglossia}
-\setdefaultlanguage{french}
-\setotherlanguage{arabic}
-
-\newfontfamily\arabicfont[Script=Arabic]{Amiri}
-\usepackage[voc]{arabxetex}
-\newcommand{\ta}[1]{\textarabic{#1}}%Évitons les éventuels surprises d'expansions
-\robustify{\textarabic}%Il faut des commandes robustes dans edindex. On utilise ici \robustify de indextools, qui est chargé avec eledmac
-\let\aemph\veryundefinedcommand
-
 \begin{document}
 
 \beginnumbering
 \pstart
-Je ne sais si cela va
-marcher... \ta{\edindex[arabe]{\ta{دخل}!f01@\ta{daxala}}daxala mubtasimaN}
+toto \edindex[arabe]{machin}machin s
 \pend
 \endnumbering
-
+%
 \printindex[arabe]
 \end{document}
 
