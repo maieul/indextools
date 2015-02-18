@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Linux Libertine O}
+
+\usepackage{indextools}
+\usepackage{eledmac}
+\makeindex[noautomatic, name=arabe, title={Index des mots arabes}]
+\usepackage{hyperref}
+
+\usepackage{polyglossia}
+\setdefaultlanguage{french}
+\setotherlanguage{arabic}
+
+\newfontfamily\arabicfont[Script=Arabic]{Amiri}
+\usepackage[voc]{arabxetex}
+\newcommand{\ta}{\textarabic}
+\let\aemph\veryundefinedcommand
+
+\begin{document}
+
+\beginnumbering
+\pstart
+Je ne sais si cela va
+marcher... \ta{\edindex[arabe]{\ta{دخل}!f01@\ta{daxala}}daxala mubtasimaN}
+\pend
+\endnumbering
+
+\printindex[arabe]
+\end{document}
+
