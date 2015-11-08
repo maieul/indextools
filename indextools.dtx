@@ -242,7 +242,7 @@ and the derived files indextools.sty and indextools.pdf.
 % You can redefine \cs{innnotenumber} to modify the standard mark.
 % The default value is:\\
 % \begin{verbatim}
-% \providecommand{\innotenumber}[2]{#1n.#2}
+% \providecommand{\innotenumber}[2]{#2n.~#1}
 % \end{verbatim}
 % \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
 % which is included in every \TeX~Live distribution since 2009. With
@@ -1025,6 +1025,9 @@ and the derived files indextools.sty and indextools.pdf.
 \newif\ifindtl@innote
 \DeclareOption{innote}{\indtl@innotetrue} 
 
+\newif\ifindtl@notenumber
+\DeclareOption{notenumber}{\indtl@notenumbertrue} 
+
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
 
@@ -1633,9 +1636,9 @@ and the derived files indextools.sty and indextools.pdf.
  }%
 }
 %    \end{macrocode}
-% \subsection{`innnote' option}
+% \subsection{`innnote' and `notenumber' options}
 % 
-% If the innote option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
+% If the `innote' option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
 %    \begin{macrocode}
 \ifindtl@innote%
   \AtBeginDocument{%
@@ -1645,6 +1648,19 @@ and the derived files indextools.sty and indextools.pdf.
     \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
     \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
     \providecommand{\innote}[1]{#1\textit{n}}
+  }
+\fi%
+%    \end{macrocode}
+% The same is true if the `notnumber' option is enabled.
+%    \begin{macrocode}
+\ifindtl@notenumber%
+  \AtBeginDocument{%
+    \RequirePackage{letltxmacro}
+    \LetLtxMacro\orig@@index\index
+    \newcommand\nindex[2][]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
+    \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
+    \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
+    \providecommand{\innotenumber}[2]{#2n.~#1}
   }
 \fi%
 %    \end{macrocode}
