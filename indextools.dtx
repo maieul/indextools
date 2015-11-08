@@ -1640,30 +1640,33 @@ and the derived files indextools.sty and indextools.pdf.
 % 
 % If the `innote' option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
 %    \begin{macrocode}
-\ifindtl@innote%
-  \AtBeginDocument{%
-    \RequirePackage{letltxmacro}
-    \LetLtxMacro\orig@@index\index
-    \newcommand\nindex[2][]{\orig@@index[#1]{#2|innote}}
-    \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
-    \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
-    \providecommand{\innote}[1]{#1\textit{n}}
-  }
-\fi%
+
+\AtBeginDocument{%
+    \ifindtl@innote%
+      \RequirePackage{letltxmacro}
+      \LetLtxMacro\orig@@index\index
+      \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
+      \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
+      
+    \fi%
 %    \end{macrocode}
 % The same is true if the `notnumber' option is enabled.
 %    \begin{macrocode}
-\ifindtl@notenumber%
-  \AtBeginDocument{%
-    \RequirePackage{letltxmacro}
-    \LetLtxMacro\orig@@index\index
-    \newcommand\nindex[2][]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
-    \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
-    \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
-    \providecommand{\innotenumber}[2]{#2n.~#1}
-  }
-\fi%
+  \ifindtl@notenumber%
+      \RequirePackage{letltxmacro}
+      \LetLtxMacro\orig@@index\index
+      \pretocmd{\@footnotetext}{\let\index\nnumberindex}{}{}
+      \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
+  \fi%
 %    \end{macrocode}
+%    \begin{macrocode}
+% And now, the command, defines in any case, but only at the begin of documents, because people can have defined them in the preamble.
+  \newcommand\nnumberindex[2][]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
+  \newcommand\nindex[2][]{\orig@@index[#1]{#2|innote}}
+  \providecommand{\innotenumber}[2]{#2n.~#1}
+  \providecommand{\innote}[1]{#1\textit{n}}
+  }
+%    \end{macrcocode}
 % \subsection{Final decisions}
 %
 % At this point, we choose the meaning of the relevant commands,
