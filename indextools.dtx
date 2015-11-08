@@ -1552,7 +1552,7 @@ and the derived files indextools.sty and indextools.pdf.
 %    \end{macrocode}
 % We define a macro that close the general  index file and run in. 
 %    \begin{macrocode}
-\newcommand{\indtl@closeandrundidxunique}[]{%
+\newcommand{\indtl@closeandrundidxunique}{%
   \immediate\closeout\@indexfile
   \indtl@exec{splitindex \indtl@splitindexoptions\space\indtl@jobname.idx}%
   \global\indtl@splitdonetrue
