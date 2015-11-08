@@ -239,7 +239,11 @@ and the derived files indextools.sty and indextools.pdf.
 % that is possible to create for a particular document.
 % \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
 % If this case, the index will be printed only on the secund run.
-% \Item[innote] add a mark for text index in note. The standard mark is an italic `n' added after the page number.
+% \Item[innote] add a mark for text index in note. The standard mark is an italic `n' added after the page number. You can redefine the \cs{innnote} command to modify the standard mark.
+% The default value is:\\
+% \begin{verbatim}
+% \providecommand{\innote}[1]{#1\textit{n}}
+% \end{verbatim}
 % \end{description}
 %
 % The last described option deserves an explanation. \LaTeX\ can
@@ -1011,7 +1015,10 @@ and the derived files indextools.sty and indextools.pdf.
   \let\indtl@splitindexmessage\relax}}
 \newif\ifindtl@afterindex
 \DeclareOption{afterindex}{\indtl@afterindextrue} 
-  
+ 
+\newif\ifindtl@innote
+\DeclareOption{innote}{\indtl@innotetrue} 
+
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
 
@@ -1619,6 +1626,21 @@ and the derived files indextools.sty and indextools.pdf.
  \MessageBreak Consequently, the index may be not ok at the first run.
  }%
 }
+%    \end{macrocode}
+% \subsection{`innnote' option}
+% 
+% If the innote option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
+%    \begin{macrocode}
+\ifindtl@innote%
+  \AtBeginDocument{%
+    \RequirePackage{letltxmacro}
+    \LetLtxMacro\orig@@index\index
+    \newcommand\nindex[2][]{\orig@@index[#1]{#2|innote}}
+    \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
+    \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
+    \providecommand{\innote}[1]{#1\textit{n}}
+  }
+\fi%
 %    \end{macrocode}
 % \subsection{Final decisions}
 %
