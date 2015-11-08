@@ -1550,6 +1550,14 @@ and the derived files indextools.sty and indextools.pdf.
   \fi
 }
 %    \end{macrocode}
+% We define a macro that close the general  index file and run in. 
+%    \begin{macrocode}
+\newcommand{\indtl@closeandrundidxunique}[]{%
+  \immediate\closeout\@indexfile
+  \indtl@exec{splitindex \indtl@splitindexoptions\space\indtl@jobname.idx}%
+  \global\indtl@splitdonetrue
+}
+%    \end{macrocode}
 % We now define the main macro that puts the specified index file into
 % the document and possibly orders to add the index title to the
 % table of contents. It is duplicated as usual. The argument |#1| is
@@ -1597,9 +1605,15 @@ and the derived files indextools.sty and indextools.pdf.
   \@nameuse{indtl@set@#1}\indtl@decide
   \if@tempswa % we can call the external program
     \ifindtl@splitdone\else
-      \immediate\closeout\@indexfile
-      \indtl@exec{splitindex \indtl@splitindexoptions\space\indtl@jobname.idx}%
-      \global\indtl@splitdonetrue
+      \ifindtl@afterindex
+        \AtEndDocument{%
+          \indtl@clearpage%
+          \indtl@closeandrundidxunique%
+          \indltl@afterindexMessage%
+        }
+      \else
+        \indtl@closeandrundidxunique
+      \fi
     \fi
   \else
     \ifindtl@splitdone\else
