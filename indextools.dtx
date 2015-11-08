@@ -1034,6 +1034,9 @@ and the derived files indextools.sty and indextools.pdf.
 \DeclareOption{quiet}{\AtEndOfPackage{%
   \let\indtl@finalmessage\@gobble
   \let\indtl@splitindexmessage\relax}}
+\newif\ifindtl@afterindex
+\DeclareOption{afterindex}{\indtl@afterindextrue} 
+  
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
 
@@ -1519,21 +1522,34 @@ and the derived files indextools.sty and indextools.pdf.
 % automatic processing is possible, so that the main macro can take
 % the appropriate action.
 %    \begin{macrocode}
-\def\indtl@makeindexname{makeindex}
-\def\indtl@decide{%
-  \@tempswafalse
-  \ifindtl@splitindex % splitindex is not "safe"
-    \ifnum\indtl@shellescape=\@ne\@tempswatrue\fi
-  \else
-    \ifx\indtl@program\indtl@makeindexname % nor is texindy
+    \def\indtl@makeindexname{makeindex}
+    \def\indtl@decide{%
+      \@tempswafalse
+      \ifindtl@splitindex % splitindex is not "safe"
+      \ifnum\indtl@shellescape=\@ne\@tempswatrue\fi
+      \else
+      \ifx\indtl@program\indtl@makeindexname % nor is texindy
       \ifnum\indtl@shellescape=\tw@\@tempswatrue\fi
-    \fi
-    \ifnum\indtl@shellescape=\@ne\@tempswatrue\fi
-  \fi
-  \ifKV@indtl@noautomatic
-    \@tempswafalse
-  \fi}
+      \fi
+      \ifnum\indtl@shellescape=\@ne\@tempswatrue\fi
+      \fi
+      \ifKV@indtl@noautomatic
+      \@tempswafalse
+    \fi}
 %    \end{macrocode}
+% We define a macro that close a specified index file and run in. 
+%    \begin{macrocode}
+    \newcommand{\indtl@closeandrundidx}[1]{%
+      \immediate\closeout\csname #1@idxfile\endcsname
+      \let\indtl@indexname\indexname % keep \indexname
+      \@nameuse{indtl@set@#1}\indtl@decide
+      \if@tempswa % we can call the external program
+      \indtl@exec{\indtl@program\indtl@options#1.idx}%
+      \else
+      \indtl@finalmessage{#1}%
+  \fi
+}
+%    \ebd{macrocode}
 % We now define the main macro that puts the specified index file into
 % the document and possibly orders to add the index title to the
 % table of contents. It is duplicated as usual. The argument |#1| is
@@ -1550,13 +1566,17 @@ and the derived files indextools.sty and indextools.pdf.
   \ifindtl@nonewpage\else
     \indtl@clearpage
   \fi
-  \immediate\closeout\csname #1@idxfile\endcsname
-  \let\indtl@indexname\indexname % keep \indexname
-  \@nameuse{indtl@set@#1}\indtl@decide
-  \if@tempswa % we can call the external program
-    \indtl@exec{\indtl@program\indtl@options#1.idx}%
-  \else
-    \indtl@finalmessage{#1}%
+  \ifindtl@afterindex%
+    \AtEndDocument{%
+      \indtl@clearpage%
+      \indtl@closeandrundidx{#1}%
+      \PackageWarning{indextools}{You use the `afterindex' option.
+       \MessageBreak That means you use \string\index\space commands after \string\printindex\space command.
+       \MessageBreak Consequently, the index may be not ok at the first run.
+      }%
+    }%
+  \else%
+    \indtl@closeandrundidx{#1}%
   \fi
   \ifKV@indtl@intoc
     \def\indtl@maybeaddtotoc{\@nameuse{phantomsection}%
@@ -1606,7 +1626,6 @@ and the derived files indextools.sty and indextools.pdf.
 }
 %    \end{macrocode}
 %
-% 
 % \subsection{Final decisions}
 %
 % At this point, we choose the meaning of the relevant commands,
