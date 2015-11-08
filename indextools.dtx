@@ -98,7 +98,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.4}{2015/01/23}{Compatibility with bidi. Fork from imakeidx. New name indextools}
 % \changes{v1.5}{2015/11/08}{New option `afterindex'}
 % \changes{v1.5}{2015/11/08}{New option `innote'}
-
+% \changes{v1.5}{2015/11/08}{New option `notenumber'}
 %
 % \begin{abstract}
 % This package is a fork of the \pack{imakeidx} package. The original authors
@@ -237,6 +237,12 @@ and the derived files indextools.sty and indextools.pdf.
 % The default value is:\\
 % \begin{verbatim}
 % \providecommand{\innote}[1]{#1\textit{n}}
+% \end{verbatim}
+% \Item[notenumber] adds the note number for content indexed in note. The standard marks is a `n.' followed by the note number.
+% You can redefine \cs{innnotenumber} to modify the standard mark.
+% The default value is:\\
+% \begin{verbatim}
+% \providecommand{\innotenumber}[2]{#1n.#2}
 % \end{verbatim}
 % \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
 % which is included in every \TeX~Live distribution since 2009. With
