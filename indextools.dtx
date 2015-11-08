@@ -96,7 +96,9 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.3}{2013/07/11}{Added internal so as to cooperate in a better
 % way with eledmac (by Maïeul Rouquette)}
 % \changes{v1.4}{2015/01/23}{Compatibility with bidi. Fork from imakeidx. New name indextools}
-% \changes{v1.5}{2015/11/08}{New option afterindex}
+% \changes{v1.5}{2015/11/08}{New option `afterindex'}
+% \changes{v1.5}{2015/11/08}{New option `innote'}
+
 %
 % \begin{abstract}
 % This package is a fork of the \pack{imakeidx} package. The original authors
@@ -237,6 +239,7 @@ and the derived files indextools.sty and indextools.pdf.
 % that is possible to create for a particular document.
 % \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
 % If this case, the index will be printed only on the secund run.
+% \Item[innote] add a mark for text index in note. The standard mark is an italic `n' added after the page number.
 % \end{description}
 %
 % The last described option deserves an explanation. \LaTeX\ can
@@ -729,34 +732,6 @@ and the derived files indextools.sty and indextools.pdf.
 % necessary to load this package \pack{indextools} \emph{before} package
 % \pack{combine}.
 %
-% \subsubsection{Package \pack{ledmac}}
-%
-% Some users reported some conflicts with package \pack{ledmac}; in order
-% to mark with an italic `n' the pages where the reference was made in
-% one of the footnotes, it is necessary to use the package \pack{etoolbox}
-% and its command |\pretocmd|; actually it is not necessary to load
-% \pack{etoolbox}, because this \pack{indextools} package provides for it:
-%\begin{verbatim}
-%...
-%\usepackage{letltxmacro}
-%\usepackage{indextools}
-%...
-%\makeatletter
-%\LetLtxMacro\orig@@index\index
-%\newcommand\nindex[1]{\orig@@index{#1|innote}}
-%\newcommand\innote[1]{#1\textit{n}}
-%...
-%\makeindex[...] 
-%...
-%\AtBeginDocument{%
-%    \pretocommand{\@footnotetext}{\let\index\nindex}{}{}
-%}
-%\end{verbatim}
-% We did not apply this patch directly because we tried to avoid possible
-% conflicts that might show up when loading other packages. Therefore we
-% simply show what to do in case it might be necessary.
-%
-% With the newer \pack{eledmac} package there are no problems.
 %
 % \subsection{Package \pack{bidi}}
 % A strange conflict was discovered between packages \pack{imakeidx} and
