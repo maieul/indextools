@@ -231,12 +231,6 @@ and the derived files indextools.sty and indextools.pdf.
 % \Item[original] uses the class-provided \texttt{theindex}
 % environment for typesetting the indices; it is implicitly set if the
 % document class option \texttt{twocolumn} has been specified.
-% \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
-% which is included in every \TeX~Live distribution since 2009. With
-% this option all index entries, which are written in one raw index
-% file, are successively split into all the requested index files;
-% in this way there is virtually no limit on the number of indices
-% that is possible to create for a particular document.
 % \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
 % If this case, the index will be printed only on the secund run.
 % \Item[innote] add a mark for text index in note. The standard mark is an italic `n' added after the page number. You can redefine the \cs{innnote} command to modify the standard mark.
@@ -244,6 +238,12 @@ and the derived files indextools.sty and indextools.pdf.
 % \begin{verbatim}
 % \providecommand{\innote}[1]{#1\textit{n}}
 % \end{verbatim}
+% \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
+% which is included in every \TeX~Live distribution since 2009. With
+% this option all index entries, which are written in one raw index
+% file, are successively split into all the requested index files;
+% in this way there is virtually no limit on the number of indices
+% that is possible to create for a particular document.
 % \end{description}
 %
 % The last described option deserves an explanation. \LaTeX\ can
