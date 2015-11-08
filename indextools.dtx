@@ -201,13 +201,10 @@ and the derived files indextools.sty and indextools.pdf.
 %
 % The available \meta{options} consist in a comma separated list of
 % the following options:
-% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\ttfamily#1]}
-% ^^A
 % \Item[makeindex] in order to use the \prog{makeindex} sorting and
 % formatting engine; this option is the default and is mutually
 % exclusive with the next option.
-% ^^A
 % \Item[xindy] in order to use the \prog{xindy} sorting and formatting
 % engine; \texttt{texindy} is an alias for \texttt{xindy} and actually
 % it's the script \prog{texindy} which is called by this package.
@@ -216,7 +213,6 @@ and the derived files indextools.sty and indextools.pdf.
 % the command line specific settings, it is possible to specify the
 % option \texttt{truexindy}; the user is then responsible to set up
 % the \prog{xindy} engine with the suitable command line options.
-% ^^A
 % \Item[noautomatic] disables the automatic splitting of the raw
 % index files and running of the system programs; this option might
 % be used to save time when one knows for sure that the index files
@@ -224,26 +220,21 @@ and the derived files indextools.sty and indextools.pdf.
 % spent in splitting, sorting and formatting is so short that this
 % option might be useful only when very lengthy indices are being
 % processed.
-% ^^A
 % \Item[nonewpage] inhibits the new page command to be issued when
 % using an article type document class and multiple indices are being
 % typeset. We don't see why someone would use multiple indices in an
 % article (except possibly for package documentations, which usually
 % provide a macro index and a list of changes).
-% ^^A
 % \Item[quiet] suppresses all messages about manual index processing.
-% ^^A
 % \Item[original] uses the class-provided \texttt{theindex}
 % environment for typesetting the indices; it is implicitly set if the
 % document class option \texttt{twocolumn} has been specified.
-% ^^A
 % \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
 % which is included in every \TeX~Live distribution since 2009. With
 % this option all index entries, which are written in one raw index
 % file, are successively split into all the requested index files;
 % in this way there is virtually no limit on the number of indices
 % that is possible to create for a particular document.
-% ^^A
 % \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
 % If this case, the index will be printed only on the secund run.
 % \end{description}
@@ -278,17 +269,13 @@ and the derived files indextools.sty and indextools.pdf.
 % and \cs{printindex} must be used. This package redefines them so as
 % to produce multiple indices and defines some other commands. The first three
 % of the following commands may be used only in the preamble.
-% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\ttfamily\cs{#1}]}
-% ^^A
 % \Item[makeindex] with the syntax:\\[1ex]
 % \cs{makeindex}\oarg{key-values}\\[1ex]
 % where \meta{key-values} is a comma separated list of key-value
 % assignments of the form: \texttt{key=value}; the available
 % keys are the following:
-% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\sffamily\textsl{#1}]}
-% ^^A
 % \Item[name] is the symbolic name for an index; if this key is not
 % specified, it defaults to the value of the \cs{jobname} control
 % sequence, in other words the name of the current main \texttt{.tex}
@@ -297,11 +284,9 @@ and the derived files indextools.sty and indextools.pdf.
 % doing multiple indices and is used with the \cs{index}
 % command to point to the right index.\\*
 % Example: \texttt{name=nameidx}
-% ^^A
 % \Item[title] is the title that is typeset at the beginning of the
 % specific index; if not specified, the \cs{indexname} value is
 % used.\\* Example: \texttt{title=Index of names}.
-% ^^A
 % \Item[program] is the name of the system program that is used to
 % sort and format an index; valid choices are \prog{makeindex},
 % \prog{xindy}, or \prog{texindy}, plus \prog{truexindy}. If not
@@ -309,7 +294,6 @@ and the derived files indextools.sty and indextools.pdf.
 % If no option is specified, \prog{makeindex} is used. In order to
 % use \prog{xindy}, it's necessary to call \prog{pdflatex} with
 % the shell escape command line option.\\* Example: \texttt{program=xindy}.
-% ^^A
 % \Item[options] is the list of options to be passed to the sorting
 % and formatting program; this list is a balanced text of program
 % options, separated with the syntax required by the sorting and
@@ -317,40 +301,31 @@ and the derived files indextools.sty and indextools.pdf.
 % \prog{makeindex} sorting and formatting style \pack{mystyle.ist} and
 % avoiding any message in the screen output, write \texttt{options=-s
 % mystyle}.
-% ^^A
 % \Item[noautomatic] is a boolean key that defaults to \texttt{false};
 % you can set it to \texttt{true} by simply listing its key in the
 % key-value list, without necessarily specifying the \texttt{=true}
 % part. If specified the index sorting program won't be called during
 % the typesetting run for this particular index.
-% ^^A
 % \Item[intoc] is a boolean variable that defaults to \texttt{false};
 % if you want to set it \texttt{true} you must simply list this key in
 % the key-value list, with no need of specifying the \texttt{=true}
 % part. By setting this key to \texttt{true} an entry for this
 % particular index is put in the table of contents.
-% ^^A
 % \Item[columns] accepts an integer representing the number of columns
 % in the index; this is silently ignored if the \texttt{original} or
 % the \texttt{twocolumn} options are set; the number can even
 % be~$1$.\\* Example: \texttt{columns=3}
-% ^^A
 % \Item[columnsep] accepts a dimension representing the separation
 % between index columns; the default is $35$\,pt as in the standard
 % classes.\\* Example: \texttt{columnsep=15pt}
-% ^^A
 % \Item[columnseprule] is a boolean option; if it is set, a rule will appear
 % between the index columns.
-% ^^A
 % \end{description}
-% ^^A
 % \Item[indexsetup] with the syntax:\\[1ex]
 % \cs{indexsetup}\marg{key-values}\\[1ex]
 % where again \meta{key-values} is a comma separated list of \texttt{key=value}
 % assignments; the available keys are:
-% ^^A
 % \begin{description}\def\Item[#1]{\item[\normalfont\sffamily\textsl{#1}]}
-% ^^A
 % \Item[level] whose acceptable values are sectioning commands such as
 % \cs{chapter} or \cs{chapter*}. Actually any command with an argument
 % will do and will receive the index title as its argument. The
@@ -614,7 +589,6 @@ and the derived files indextools.sty and indextools.pdf.
 % If shell hackers know a way to access the exit status of the called
 % program, we'd be glad to implement a supplementary check.
 %
-% ^^A G
 % \section{Hints}\label{sec:hints}
 % Actually this package reaches two goals: (\textit{a})~it typesets
 % the indices of a specific document in just one run, and
@@ -828,18 +802,14 @@ and the derived files indextools.sty and indextools.pdf.
 % When you make any kind of customisation, remember that there are
 % several classes, or personal settings, or features that may render your
 % customisation very difficult to handle. Typically:
-%^^A
 %\begin{itemize}
-%^^A
 % \item There are classes where the normal usable highest sectioning
 % command, disregarding |\part|, is not |\chapter|, but |\section|; for
 % example classes \class{article}, \class{scrartcl}.
-%^^A
 %\item Sectioning commands come in two varieties: starred and unstarred;
 % the former ones are not numbered and do not produce any entry in the
 % headings and in the table of contents; the latter ones may  behave
 % differently according to the next item.
-%^^A
 % \item There are some classes (for example \class{book},
 % \class{scrbook}, \class{menoir},\dots) that have the special
 % ``sectioning'' declarations |\frontmatter|, |\mainmatter|, and
@@ -850,7 +820,6 @@ and the derived files indextools.sty and indextools.pdf.
 % end. This means that the |\backmatter| declaration may be in force;
 % in this case unstarred sectioning commands are not numbered but they
 % produce normal headings and table of contents entries.
-%^^A
 %\item Heading entries are used by the output routine paging algorithm
 % in such a way as to extract the left or the right part from suitable
 % ``marks''; for the even (left) pages the required information is
@@ -862,14 +831,12 @@ and the derived files indextools.sty and indextools.pdf.
 % \Kvalue{headers} option value, you specify two brace balanced strings that
 % are loaded through |\markboth| as the left and right part of the
 % current mark.
-%^^A
 % \item The contents of the marks may be very varied; they are generally
 % made up of two brace balanced strings, which in turn may contain other
 % brace balanced strings that may be used in different ways by the selected page
 % style and by the page style definitions of the macros |\chaptermarks|,
 % |\sectionmarks|, and |\subsectionmarks| that may interfere with personal
 % customisations.
-%^^A
 % \item Remember also that things change in an obvious way when one side
 % typesetting is chosen; all pages are treated as if they were odd ones;
 % therefore any customisation must take into account also this aspect.
@@ -1091,7 +1058,7 @@ and the derived files indextools.sty and indextools.pdf.
 \@onlypreamble\splitindexoptions
 %    \end{macrocode}
 %
-% ^^A A - incompatibilities and emulation
+% \subsection{Incompatibilities and emulation}
 %
 % While experimenting we found out that some classes or packages are
 % either incompatible with this one, or must be faked in order to
@@ -1143,7 +1110,7 @@ and the derived files indextools.sty and indextools.pdf.
 \providecommand*\alsoname{see also}
 %    \end{macrocode}
 %
-% ^^A C - \makeindex
+% \subsection{\cs{makeindex}}
 %
 % From here on, some commands are duplicated; this depends on the
 % fact that the behavior must be different when using \prog{splitindex} or
@@ -1278,7 +1245,7 @@ and the derived files indextools.sty and indextools.pdf.
  \fi}
 %    \end{macrocode}
 %
-% ^^A D - \index 
+% \subsection{\cs{index}} 
 %
 % Provide a default definition for \cs{index}; when a \cs{makeindex}
 % command is given and \LaTeX\ is writing on auxiliary files,
@@ -1357,7 +1324,7 @@ and the derived files indextools.sty and indextools.pdf.
   }
 %    \end{macrocode}
 %
-% ^^A E - \printindex
+% \subsection{\cs{printindex}}
 %
 % Compilation of the indices is disabled if \texttt{-shell-escape} has
 % not been given or the restricted mode is not active; in this case we
@@ -1639,7 +1606,8 @@ and the derived files indextools.sty and indextools.pdf.
 }
 %    \end{macrocode}
 %
-% ^^A F - Final decisions
+% 
+% \subsection{Final decisions}
 %
 % At this point, we choose the meaning of the relevant commands,
 % reclaiming the space occupied by the discarded ones
