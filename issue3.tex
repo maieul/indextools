@@ -1,8 +1,9 @@
 \documentclass{article}
 
 \usepackage{fontspec}
-\usepackage[afterindex,makeindex]{indextools}
+\usepackage[afterindex,splitindex]{indextools}
 \makeindex
+\makeindex[name=toto,title=toto]
 \begin{document}
 
 Blablabla\index{index1}
@@ -10,9 +11,9 @@ Blablabla\index{index1}
 \newpage
 
 \printindex
-
+\printindex[toto]
 \newpage
 
-Blablabla\index{index2}
+Blablabla\index[toto]{index2}
 
 \end{document}
