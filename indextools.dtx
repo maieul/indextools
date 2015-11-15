@@ -80,7 +80,7 @@ and the derived files indextools.sty and indextools.pdf.
 \end{document}
 %</driver>
 % \fi
-% \CheckSum{833}
+% \CheckSum{889}
 %
 % \changes{v1.0}{2010/07/10}{First public version}
 % \changes{v1.0a}{2010/07/12}{Small bug correction}
@@ -96,7 +96,9 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.3}{2013/07/11}{Added internal so as to cooperate in a better
 % way with eledmac (by Maïeul Rouquette)}
 % \changes{v1.4}{2015/01/23}{Compatibility with bidi. Fork from imakeidx. New name indextools}
-% \changes{v1.5}{2015/11/08}{New option afterindex}
+% \changes{v1.5}{2015/11/08}{New option `afterindex'}
+% \changes{v1.5}{2015/11/08}{New option `innote'}
+% \changes{v1.5}{2015/11/08}{New option `notenumber'}
 %
 % \begin{abstract}
 % This package is a fork of the \pack{imakeidx} package. The original authors
@@ -229,14 +231,25 @@ and the derived files indextools.sty and indextools.pdf.
 % \Item[original] uses the class-provided \texttt{theindex}
 % environment for typesetting the indices; it is implicitly set if the
 % document class option \texttt{twocolumn} has been specified.
+% \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
+% If this case, the index will be printed only on the secund run.
+% \Item[innote] adds a mark for content indexed in note. The standard mark is an italic `n' added after the page number. You can redefine the \cs{innnote} command to modify the standard mark.
+% The default value is:\\
+% \begin{verbatim}
+% \providecommand{\innote}[1]{#1\textit{n}}
+% \end{verbatim}
+% \Item[notenumber] adds the note number for content indexed in note. The standard marks is a `n.' followed by the note number.
+% You can redefine \cs{innnotenumber} to modify the standard mark.
+% The default value is:\\
+% \begin{verbatim}
+% \providecommand{\innotenumber}[2]{#2n.~#1}
+% \end{verbatim}
 % \Item[splitindex] calls the \prog{splitindex} script by Markus Kohm,
 % which is included in every \TeX~Live distribution since 2009. With
 % this option all index entries, which are written in one raw index
 % file, are successively split into all the requested index files;
 % in this way there is virtually no limit on the number of indices
 % that is possible to create for a particular document.
-% \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
-% If this case, the index will be printed only on the secund run.
 % \end{description}
 %
 % The last described option deserves an explanation. \LaTeX\ can
@@ -729,34 +742,6 @@ and the derived files indextools.sty and indextools.pdf.
 % necessary to load this package \pack{indextools} \emph{before} package
 % \pack{combine}.
 %
-% \subsubsection{Package \pack{ledmac}}
-%
-% Some users reported some conflicts with package \pack{ledmac}; in order
-% to mark with an italic `n' the pages where the reference was made in
-% one of the footnotes, it is necessary to use the package \pack{etoolbox}
-% and its command |\pretocmd|; actually it is not necessary to load
-% \pack{etoolbox}, because this \pack{indextools} package provides for it:
-%\begin{verbatim}
-%...
-%\usepackage{letltxmacro}
-%\usepackage{indextools}
-%...
-%\makeatletter
-%\LetLtxMacro\orig@@index\index
-%\newcommand\nindex[1]{\orig@@index{#1|innote}}
-%\newcommand\innote[1]{#1\textit{n}}
-%...
-%\makeindex[...] 
-%...
-%\AtBeginDocument{%
-%    \pretocommand{\@footnotetext}{\let\index\nindex}{}{}
-%}
-%\end{verbatim}
-% We did not apply this patch directly because we tried to avoid possible
-% conflicts that might show up when loading other packages. Therefore we
-% simply show what to do in case it might be necessary.
-%
-% With the newer \pack{eledmac} package there are no problems.
 %
 % \subsection{Package \pack{bidi}}
 % A strange conflict was discovered between packages \pack{imakeidx} and
@@ -1036,7 +1021,13 @@ and the derived files indextools.sty and indextools.pdf.
   \let\indtl@splitindexmessage\relax}}
 \newif\ifindtl@afterindex
 \DeclareOption{afterindex}{\indtl@afterindextrue} 
-  
+ 
+\newif\ifindtl@innote
+\DeclareOption{innote}{\indtl@innotetrue} 
+
+\newif\ifindtl@notenumber
+\DeclareOption{notenumber}{\indtl@notenumbertrue} 
+
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
 
@@ -1645,6 +1636,37 @@ and the derived files indextools.sty and indextools.pdf.
  }%
 }
 %    \end{macrocode}
+% \subsection{`innnote' and `notenumber' options}
+% 
+% If the `innote' option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
+%    \begin{macrocode}
+
+\AtBeginDocument{%
+    \ifindtl@innote%
+      \RequirePackage{letltxmacro}
+      \LetLtxMacro\orig@@index\index
+      \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
+      \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
+      
+    \fi%
+%    \end{macrocode}
+% The same is true if the `notnumber' option is enabled.
+%    \begin{macrocode}
+  \ifindtl@notenumber%
+      \RequirePackage{letltxmacro}
+      \LetLtxMacro\orig@@index\index
+      \pretocmd{\@footnotetext}{\let\index\nnumberindex}{}{}
+      \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
+  \fi%
+%    \end{macrocode}
+%    \begin{macrocode}
+% And now, the command, defines in any case, but only at the begin of documents, because people can have defined them in the preamble.
+  \newcommand\nnumberindex[2][]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
+  \newcommand\nindex[2][]{\orig@@index[#1]{#2|innote}}
+  \providecommand{\innotenumber}[2]{#2n.~#1}
+  \providecommand{\innote}[1]{#1\textit{n}}
+}
+%    \end{macrcocode}
 % \subsection{Final decisions}
 %
 % At this point, we choose the meaning of the relevant commands,
