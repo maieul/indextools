@@ -6,7 +6,7 @@ dist: indextools.pdf indextools.sty
 	ln $(FILES) indextools
 	zip -r ../indextools.zip  indextools
 README: README.md
-	cp README.md README
+	ln README.md README
 %.pdf %.sty: %.dtx
 	latexmk *dtx
  
