@@ -45,7 +45,7 @@ and the derived files indextools.sty and indextools.pdf.
 %<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
 %<package>\ProvidesPackage{indextools}%
 %<*package>
-   [2015/11/15 v1.5 Package for typesetting indices in a synchronous mode]
+   [2015/11/21 v1.5.1 Package for typesetting indices in a synchronous mode]
 %</package>
 %<*driver>
 \documentclass{ltxdoc}
@@ -80,7 +80,7 @@ and the derived files indextools.sty and indextools.pdf.
 \end{document}
 %</driver>
 % \fi
-% \CheckSum{889}
+% \CheckSum{891}
 %
 % \changes{v1.0}{2010/07/10}{First public version}
 % \changes{v1.0a}{2010/07/12}{Small bug correction}
@@ -99,6 +99,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.5}{2015/11/15}{New option `afterindex'}
 % \changes{v1.5}{2015/11/15}{New option `innote'}
 % \changes{v1.5}{2015/11/15}{New option `notenumber'}
+% \changes{v1.5}{2015/11/21}{Fix bug with options `notenumber' and `innote' when using \cs{index} without optional argument}
 %
 % \begin{abstract}
 % This package is a fork of the \pack{imakeidx} package. The original authors
@@ -1661,8 +1662,8 @@ and the derived files indextools.sty and indextools.pdf.
 %    \end{macrocode}
 %    \begin{macrocode}
 % And now, the command, defines in any case, but only at the begin of documents, because people can have defined them in the preamble.
-  \newcommand\nnumberindex[2][]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
-  \newcommand\nindex[2][]{\orig@@index[#1]{#2|innote}}
+  \newcommand\nnumberindex[2][\indtl@jobname]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
+  \newcommand\nindex[2][\indtl@jobname]{\orig@@index[#1]{#2|innote}}
   \providecommand{\innotenumber}[2]{#2n.~#1}
   \providecommand{\innote}[1]{#1\textit{n}}
 }
