@@ -1,0 +1,43 @@
+
+\documentclass{scrbook}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[german]{babel}
+
+\usepackage[makeindex,notenumber]{indextools}
+\usepackage[series={A,B,C},noeledsec,noend]{reledmac}
+\usepackage{reledpar}
+\makeindex[title=Index personarum]
+
+\begin{document}
+
+\chapter{Carolus Magnus et alii quamplures}
+Carolus Magnus\index{Carolus Magnus}, 
+Ludovicus Pius\footnote{Ludovicus Pius\index{Ludovicus Pius}}
+
+\begin{pairs}
+
+\begin{Leftside}
+\beginnumbering
+\pstart
+Pippinus Maior\footnoteA{Pippinus Maior\index{Pippinus Maior}}.
+\pend
+\endnumbering
+\end{Leftside}
+
+\begin{Rightside}
+\beginnumbering
+\pstart
+Pippinus Minor\footnoteA{Pippinus Minor\index{Pippinus Minor}}.
+\pend
+\endnumbering
+\end{Rightside}
+
+\end{pairs}
+\Columns
+
+\printindex
+
+\end{document}
+
