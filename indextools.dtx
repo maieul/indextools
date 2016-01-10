@@ -18,7 +18,7 @@
 
 Copyright 2010--2013 Enrico Gregorio <Enrico dot Gregorio at univr dot it>
 
-Copyright 2014 Maïeul Rouquette <maieul at maieul dot net>
+Copyright 2014--* Maïeul Rouquette <maieul at maieul dot net>
 
 Distributable under the LaTeX Project Public License,
 version 1.3c or higher (your choice). The latest version of
@@ -45,7 +45,7 @@ and the derived files indextools.sty and indextools.pdf.
 %<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
 %<package>\ProvidesPackage{indextools}%
 %<*package>
-   [2015/11/22 v1.5.1 Package for typesetting indices in a synchronous mode]
+   [2016/06/10 v1.5.2 Package for typesetting indices in a synchronous mode]
 %</package>
 %<*driver>
 \documentclass{ltxdoc}
@@ -100,6 +100,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.5}{2015/11/15}{New option `innote'}
 % \changes{v1.5}{2015/11/15}{New option `notenumber'}
 % \changes{v1.5.1}{2015/11/22}{Fix bug with options `notenumber' and `innote' when using \cs{index} without optional argument}
+% \changes{v1.5.2}{2016/01/10}{Fix bug with options `notenumber' and `innote' when using \cs{index} with page number encapsulator (like |textbf)}
 %
 % \begin{abstract}
 % This package is a fork of the \pack{imakeidx} package. The original authors
@@ -994,15 +995,13 @@ and the derived files indextools.sty and indextools.pdf.
 % which is incompatible with \pack{multicol}. We define also an
 % internal alias for |\immediate\write18|, a rudimentary check for the
 % typesetting engine and a macro for modifying the command line call
-% to \prog{splitindex}. The \pack{xpatch} is requested; at the moment
-% none if its features are used, but it calls \pack{etoolbox}, whose
-% facilities are used here; while future extensions will benefit from
-% the extended patched commands, that strongly enrich the performances
-% of the main package \pack{etoolbox}.
+% to \prog{splitindex}. The \pack{etoolbox} package, whose
+% facilities are used here, is required.
 % \changes{v1.1a}{2012/09/07}{Fixed bug with possibly defined
 % \cs{directlua}; now we leave the check to \pack{ifluatex}; using
 % also \pack{ifxetex} for symmetry.}
 %    \begin{macrocode}
+\RequirePackage{etoolbox}
 \DeclareOption{xindy}{\def\indtl@progdefault{texindy}}
 \DeclareOption{texindy}{\def\indtl@progdefault{texindy}}
 \DeclareOption{truexindy}{\def\indtl@progdefault{truexindy}}
@@ -1029,8 +1028,19 @@ and the derived files indextools.sty and indextools.pdf.
 \newif\ifindtl@notenumber
 \DeclareOption{notenumber}{\indtl@notenumbertrue} 
 
+
+
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
+
+\ifboolexpr{bool{indtl@innote} or bool{indtl@notenumber}}{%
+  \RequirePackage{xstring}%
+}{}%
+
+\ifboolexpr{bool{indtl@innote} and bool{indtl@notenumber}}{%
+    \indtl@innotefalse
+      \PackageError{indextools}{You can't use both `innote' and `notenumber' options in the same time.}{}%
+}{}
 
 \if@twocolumn\indtl@originaltrue\fi
 \def\indtl@exec{\immediate\write18}
@@ -1047,7 +1057,6 @@ and the derived files indextools.sty and indextools.pdf.
   \fi
   \let\indtl@exec\pdf@system
 \fi
-\RequirePackage{xpatch}
 \edef\indtl@splitindexoptions{-m \string"\string"}
 \def\splitindexoptions#1{\g@addto@macro\indtl@splitindexoptions{ #1}}
 \@onlypreamble\splitindexoptions
@@ -1651,7 +1660,7 @@ and the derived files indextools.sty and indextools.pdf.
       
     \fi%
 %    \end{macrocode}
-% The same is true if the `notnumber' option is enabled.
+% The same is true if the `notenumber' option is enabled.
 %    \begin{macrocode}
   \ifindtl@notenumber%
       \RequirePackage{letltxmacro}
@@ -1660,14 +1669,40 @@ and the derived files indextools.sty and indextools.pdf.
       \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
   \fi%
 %    \end{macrocode}
-%    \begin{macrocode}
 % And now, the command, defines in any case, but only at the begin of documents, because people can have defined them in the preamble.
-  \newcommand\nnumberindex[2][\indtl@jobname]{\orig@@index[#1]{#2|innotenumber{\thefootnote}}}
-  \newcommand\nindex[2][\indtl@jobname]{\orig@@index[#1]{#2|innote}}
+%
+%    First, a command to get the encapsulator of an index entry (for example \verb+|textbf+)
+%    \begin{macrocode}
+  \newcommand{\indtl@getencapsulator}[1]{%
+    \StrCut{#1}{|}{\indtl@content}{\indtl@encapsulator}%
+  }%
+%    \end{macrocode}
+%    Then the specific indexing command
+%    \begin{macrocode}
+  \newcommand\nnumberindex[2][\indtl@jobname]{%
+    \indtl@getencapsulator{#2}%
+    \orig@@index[#1]{\indtl@content|\indtl@encapsulator innotenumber{\thefootnote}}%
+   }%
+  \newcommand\nindex[2][\indtl@jobname]{%
+    \indtl@getencapsulator{#2}%
+    \orig@@index[#1]{\indtl@content|\indtl@encapsulator innote}%
+  }
+%    \end{macrocode}
+% And finally, the \cs{innotenumber} and \cs{innote} commands, and derivated. 
+%    \begin{macrocode}
   \providecommand{\innotenumber}[2]{#2n.~#1}
+  
+  \providecommand{\emphfinnnotenumber}[2]{\emph{\innotenumber{#1}{#2}}}
+  \providecommand{\textbfinnotenumber}[2]{\textbf{\innotenumber{#1}{#2}}}
+  \providecommand{\textrminnotenumber}[2]{\textrm{\innotenumber{#1}{#2}}}
+  
   \providecommand{\innote}[1]{#1\textit{n}}
+  \providecommand{\emphfinnnote}[1]{\emph{\innote{#1}}}
+  \providecommand{\textbfinnote}[1]{\textbf{\innote{#1}}}
+  \providecommand{\textrminnote}[1]{\textrm{\innote{#1}}}
+
 }
-%    \end{macrcocode}
+%    \end{macrocode}
 % \subsection{Final decisions}
 %
 % At this point, we choose the meaning of the relevant commands,
