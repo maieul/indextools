@@ -1037,6 +1037,11 @@ and the derived files indextools.sty and indextools.pdf.
   \RequirePackage{xstring}%
 }{}%
 
+\ifboolexpr{bool{indtl@innote} and bool{indtl@notenumber}}{%
+    \indtl@innotefalse
+      \PackageError{indextools}{You can't use both `innote' and `notenumber' options in the same time.}{}%
+}{}
+
 \if@twocolumn\indtl@originaltrue\fi
 \def\indtl@exec{\immediate\write18}
 \def\indtl@engine{(pdf)latex}
