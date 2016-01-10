@@ -101,6 +101,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \changes{v1.5}{2015/11/15}{New option `notenumber'}
 % \changes{v1.5.1}{2015/11/22}{Fix bug with options `notenumber' and `innote' when using \cs{index} without optional argument}
 % \changes{v1.5.2}{2016/01/10}{Fix bug with options `notenumber' and `innote' when using \cs{index} with page number encapsulator (like |textbf)}
+% \changes{v1.5.2}{2016/01/10}{Fix bug with options `notenumber' and `innote' and the \cs{ibibleverse} commands of \cs{bibleverse} package}
 %
 % \begin{abstract}
 % This package is a fork of the \pack{imakeidx} package. The original authors
@@ -1674,7 +1675,10 @@ and the derived files indextools.sty and indextools.pdf.
 %    First, a command to get the encapsulator of an index entry (for example \verb+|textbf+)
 %    \begin{macrocode}
   \newcommand{\indtl@getencapsulator}[1]{%
+    \saveexpandmode
+    \noexpandarg
     \StrCut{#1}{|}{\indtl@content}{\indtl@encapsulator}%
+    \restoreexpandmode
   }%
 %    \end{macrocode}
 %    Then the specific indexing command
