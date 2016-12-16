@@ -234,13 +234,13 @@ and the derived files indextools.sty and indextools.pdf.
 % document class option \texttt{twocolumn} has been specified.
 % \Item[afterindex] allows to use \cs{index} command after \cs{printindex}.
 % If this case, the index will be printed only on the secund run.
-% \Item[innote] adds a mark for content indexed in note. The standard mark is an italic `n' added after the page number. You can redefine the \cs{innnote} command to modify the standard mark.
+% \Item[innote] adds a mark for content indexed in note. The standard mark is an italic `n' added after the page number. You can redefine the \cs{innote} command to modify the standard mark.
 % The default value is:\\
 % \begin{verbatim}
 % \providecommand{\innote}[1]{#1\textit{n}}
 % \end{verbatim}
 % \Item[notenumber] adds the note number for content indexed in note. The standard marks is a `n.' followed by the note number.
-% You can redefine \cs{innnotenumber} to modify the standard mark.
+% You can redefine \cs{innotenumber} to modify the standard mark.
 % The default value is:\\
 % \begin{verbatim}
 % \providecommand{\innotenumber}[2]{#2n.~#1}
@@ -1637,7 +1637,7 @@ and the derived files indextools.sty and indextools.pdf.
  }%
 }
 %    \end{macrocode}
-% \subsection{`innnote' and `notenumber' options}
+% \subsection{`innote' and `notenumber' options}
 % 
 % If the `innote' option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
 %    \begin{macrocode}
