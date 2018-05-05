@@ -1,0 +1,18 @@
+\documentclass{scrbook}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[german]{babel}
+
+%\usepackage[makeindex]{imakeidx}
+
+\usepackage[makeindex]{indextools}
+\makeindex[title=Personen]
+\usepackage[itemlayout=relhang,hangindent=2em]{idxlayout}
+
+\begin{document}
+
+Albert der Große\index{Albert der Große (Albertus von Lauingen)}
+Gottfried von Bouillon\index{Gottfried von Bouillon (Godefridus Bullionensis)}
+
+\printindex
+\end{document}
