@@ -303,8 +303,8 @@ and the derived files indextools.sty and indextools.pdf.
 % specific index; if not specified, the \cs{indexname} value is
 % used.\\* Example: \texttt{title=Index of names}.
 % \Item[program] is the name of the system program that is used to
-% sort and format an index; valid choices are \prog{makeindex},
-% \prog{xindy}, or \prog{texindy}, plus \prog{truexindy}. If not
+% sort and format an index; valid choices are \prog{makeindex} ;
+% \prog{xindy}, or \prog{texindy}, plus \prog{truexindy} ; \prog{upmendex}. If not
 % specified the program specified among the package options is used.
 % If no option is specified, \prog{makeindex} is used. In order to
 % use \prog{xindy}, it's necessary to call \prog{pdflatex} with
@@ -1145,7 +1145,7 @@ and the derived files indextools.sty and indextools.pdf.
 \define@key{indtl}{name}{\def\indtl@name{#1}}
 \define@key{indtl}{title}{\def\indtl@title{#1}}
 \define@choicekey{indtl}{program}[\indtl@val\indtl@nr]
-  {makeindex,xindy,texindy,truexindy}{%
+  {makeindex,xindy,texindy,truexindy,upmendex}{%
     \ifcase\indtl@nr\relax
       \def\indtl@program{makeindex}%
     \or
@@ -1154,6 +1154,8 @@ and the derived files indextools.sty and indextools.pdf.
       \def\indtl@program{texindy}%
     \or
       \def\indtl@program{xindy}%
+    \or
+      \def\indtl@program{upmendex}%
     \fi}
 \define@key{indtl}{options}{\def\indtl@options{ #1 }}
 \define@boolkey{indtl}{noautomatic}[true]{}
