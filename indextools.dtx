@@ -207,7 +207,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \begin{description}\def\Item[#1]{\item[\normalfont\ttfamily#1]}
 % \Item[makeindex] in order to use the \prog{makeindex} sorting and
 % formatting engine; this option is the default and is mutually
-% exclusive with the next option.
+% exclusive with the two next options.
 % \Item[xindy] in order to use the \prog{xindy} sorting and formatting
 % engine; \texttt{texindy} is an alias for \texttt{xindy} and actually
 % it's the script \prog{texindy} which is called by this package.
@@ -216,6 +216,7 @@ and the derived files indextools.sty and indextools.pdf.
 % the command line specific settings, it is possible to specify the
 % option \texttt{truexindy}; the user is then responsible to set up
 % the \prog{xindy} engine with the suitable command line options.
+% \Item[upmendex] in order tu use the \prog{upmendex} sorting and formatting engine.
 % \Item[noautomatic] disables the automatic splitting of the raw
 % index files and running of the system programs; this option might
 % be used to save time when one knows for sure that the index files
@@ -1007,6 +1008,7 @@ and the derived files indextools.sty and indextools.pdf.
 \DeclareOption{texindy}{\def\indtl@progdefault{texindy}}
 \DeclareOption{truexindy}{\def\indtl@progdefault{truexindy}}
 \DeclareOption{makeindex}{\def\indtl@progdefault{makeindex}}
+\DeclareOption{upmendex}{\def\indtl@progdefault{upmendex}}
 \newif\ifindtl@disableautomatic
 \DeclareOption{noautomatic}{\indtl@disableautomatictrue}
 \newif\ifindtl@nonewpage
