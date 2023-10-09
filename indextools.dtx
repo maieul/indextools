@@ -121,7 +121,7 @@ and the derived files indextools.sty and indextools.pdf.
 %	\item this documentation.
 % \end{itemize}
 % This package replaces and extends the functionalities of \pack{imakeidx},
-% therefore  it MUST not be loaded at the same time as \pack{imakeidx}. Some 
+% therefore  it MUST not be loaded at the same time as \pack{imakeidx}. Some
 % controls are implemented to avoid these situations; if loading of
 % \pack{indextools} is required after \pack{imakeidx} is already loaded,
 % it does not get loaded; at the same time, if it gets loaded, it sets a
@@ -137,7 +137,7 @@ and the derived files indextools.sty and indextools.pdf.
 % impossible to start an index before all other pages have been
 % ejected.
 %
-% For support, please open issues on:\\[1ex] 
+% For support, please open issues on:\\[1ex]
 % \makebox[\linewidth]{\url{https://github.com/maieul/indextools}}
 % \end{abstract}
 %
@@ -146,7 +146,7 @@ and the derived files indextools.sty and indextools.pdf.
 % system is just \prog{pdftex}; the original Knuthian \prog{tex} is
 % still corrected by D.\,E.~Knuth himself, but is frozen, according to
 % his will; it is still distributed by every \TeX\ distribution, but
-% in practice \prog{pdftex}, \prog{xetex} or \prog{luatex} are the most used 
+% in practice \prog{pdftex}, \prog{xetex} or \prog{luatex} are the most used
 % interpreters  and typesetting engines of most macro packages.
 %
 % This program \prog{pdftex} was originally born with the facility of
@@ -156,7 +156,7 @@ and the derived files indextools.sty and indextools.pdf.
 % incorporates the extensions of \eTeX\ and has the ability to open a
 % shell so as to run system commands with their arguments. The same
 % is true for \prog{xetex} and \prog{luatex}.
-% 
+%
 % This facility, since the \TeX~Live 2010 distribution, is official,
 % but is sort of restricted, in the sense that the \TeX\ system
 % configuration file contains a list of ``safe'' system commands that
@@ -370,7 +370,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \texttt{plain}. You might want to set it to \texttt{empty} or some
 % other page style defined by the class or by yourself. This keyword
 % is disabled when the package \pack{fancyhdr} is loaded; any definition
-% or choice of page styles must be done before typesetting the indices. 
+% or choice of page styles must be done before typesetting the indices.
 % ^^A
 % \Item[headers] which takes two values: the left and right marks. You
 % might want to use this for disabling automatic uppercasing, by
@@ -477,7 +477,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \texttt{-\/-shell-escape} (which is \texttt{-\/-enable-write18} for
 % MiK\TeX) typesetting program  option or the \texttt{noautomatic}
 % option should be specified when loading \pack{indextools}.
-% 
+%
 % Let's look at a couple of examples. In both we suppose that the
 % document \texttt{mybook.tex} defines two indices through
 %\begin{verbatim}
@@ -616,7 +616,7 @@ and the derived files indextools.sty and indextools.pdf.
 % |\indexprologue| to write some text before the index proper gets typeset;
 % an optional space may be used in place of the default one-line spacing
 % between the index title, the prologue and the index body.
-% 
+%
 % This facility relies on a particular feature of the |multicols|
 % environment, that \pack{indextools} uses to instruct the typesetting
 % program to typeset the index with a specified number of balanced columns.
@@ -721,7 +721,7 @@ and the derived files indextools.sty and indextools.pdf.
 % an interaction between \pack{memoir} and \pack{showidx} that required
 % special attention. See below about using \pack{showidx}.
 %
-% \subsubsection{Package \pack{showidx}} 
+% \subsubsection{Package \pack{showidx}}
 %
 % Up to version 1.1 this package did not allow to use it together with
 % the \pack{showidx} package; now it is, provided that \pack{showidx}
@@ -729,7 +729,7 @@ and the derived files indextools.sty and indextools.pdf.
 % on using \pack{showidx}.
 %
 % \subsubsection{Package \pack{fancyhdr}}
-% 
+%
 % When using package \pack{fancyhdr} some inconveniences did show up;
 % now we believe we have detected the causes and we implemented the
 % necessary corrections\footnote{Thanks to Maïeul Rouquette who, before
@@ -850,7 +850,7 @@ and the derived files indextools.sty and indextools.pdf.
 %
 % Therefore if by chance you get double entries into the table of contents,
 % eliminate the \Kvalue{intoc} option from your calls; your class,
-% packages, and settings are already taking care of it. 
+% packages, and settings are already taking care of it.
 
 % The package \pack{tocbibind} should be loaded with the \Kvalue{noindex}
 % option, otherwise it would interfere with our redefinition of
@@ -1021,13 +1021,13 @@ and the derived files indextools.sty and indextools.pdf.
   \let\indtl@finalmessage\@gobble
   \let\indtl@splitindexmessage\relax}}
 \newif\ifindtl@afterindex
-\DeclareOption{afterindex}{\indtl@afterindextrue} 
- 
+\DeclareOption{afterindex}{\indtl@afterindextrue}
+
 \newif\ifindtl@innote
-\DeclareOption{innote}{\indtl@innotetrue} 
+\DeclareOption{innote}{\indtl@innotetrue}
 
 \newif\ifindtl@notenumber
-\DeclareOption{notenumber}{\indtl@notenumbertrue} 
+\DeclareOption{notenumber}{\indtl@notenumbertrue}
 
 \ExecuteOptions{makeindex}
 \ProcessOptions\relax
@@ -1102,14 +1102,14 @@ and the derived files indextools.sty and indextools.pdf.
 \providecommand*\see[2]{\emph{\seename} #1}
 \providecommand*\seealso[2]{\emph{\alsoname} #1}
 \providecommand*\seename{see}
-\providecommand*\alsoname{see also}
+\providecommand*\alsoname{seeupmendex also}
 %    \end{macrocode}
 %
 % \subsection{\cs{makeindex}}
 %
 % From here on, some commands are duplicated; this depends on the
 % fact that the behavior must be different when using \prog{splitindex} or
-% not. The memory occupied by the useless commands will be cleared at the 
+% not. The memory occupied by the useless commands will be cleared at the
 % end of package.
 %    \begin{macrocode}
 \providecommand*\makeindex{} % to use \renewcommand safely
@@ -1240,7 +1240,7 @@ and the derived files indextools.sty and indextools.pdf.
  \fi}
 %    \end{macrocode}
 %
-% \subsection{\cs{index}} 
+% \subsection{\cs{index}}
 %
 % Provide a default definition for \cs{index}; when a \cs{makeindex}
 % command is given and \LaTeX\ is writing on auxiliary files,
@@ -1289,7 +1289,7 @@ and the derived files indextools.sty and indextools.pdf.
 % so as not redefining it; then we use it to let the \pack{showidx} true or
 % simulated macros do their job, but we also take care of resetting the switch
 % default value to false at begin document time if the \pack{memoir} class is
-% being used. 
+% being used.
 %
 %
 %    \begin{macrocode}
@@ -1529,7 +1529,7 @@ and the derived files indextools.sty and indextools.pdf.
       \@tempswafalse
     \fi}
 %    \end{macrocode}
-% We define a macro that close a specified index file and run in. 
+% We define a macro that close a specified index file and run in.
 %    \begin{macrocode}
 \newcommand{\indtl@closeandrundidxsplit}[1]{%
   \immediate\closeout\csname #1@idxfile\endcsname
@@ -1542,7 +1542,7 @@ and the derived files indextools.sty and indextools.pdf.
   \fi
 }
 %    \end{macrocode}
-% We define a macro that close the general  index file and run in. 
+% We define a macro that close the general  index file and run in.
 %    \begin{macrocode}
 \newcommand{\indtl@closeandrundidxunique}{%
   \immediate\closeout\@indexfile
@@ -1638,7 +1638,7 @@ and the derived files indextools.sty and indextools.pdf.
 }
 %    \end{macrocode}
 % \subsection{`innote' and `notenumber' options}
-% 
+%
 % If the `innote' option is enabled, we modify the standard index command when we are in a note, in order to insert the \verb+|innote+ in the \verb+.idx+ file.
 %    \begin{macrocode}
 
@@ -1648,7 +1648,7 @@ and the derived files indextools.sty and indextools.pdf.
       \LetLtxMacro\orig@@index\index
       \pretocmd{\@footnotetext}{\let\index\nindex}{}{}
       \apptocmd{\@footnotetext}{\let\index\orig@@index}{}{}
-      
+
     \fi%
 %    \end{macrocode}
 % The same is true if the `notnumber' option is enabled.
