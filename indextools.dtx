@@ -208,7 +208,7 @@ and the derived files indextools.sty and indextools.pdf.
 % \begin{description}\def\Item[#1]{\item[\normalfont\ttfamily#1]}
 % \Item[makeindex] in order to use the \prog{makeindex} sorting and
 % formatting engine; this option is the default and is mutually
-% exclusive with the two next options.
+% exclusive with the three next options.
 % \Item[xindy] in order to use the \prog{xindy} sorting and formatting
 % engine; \texttt{texindy} is an alias for \texttt{xindy} and actually
 % it's the script \prog{texindy} which is called by this package.
@@ -218,6 +218,7 @@ and the derived files indextools.sty and indextools.pdf.
 % option \texttt{truexindy}; the user is then responsible to set up
 % the \prog{xindy} engine with the suitable command line options.
 % \Item[upmendex] in order tu use the \prog{upmendex} sorting and formatting engine.
+% \Item[xindex] in order tu use the \prog{xindex} sorting and formatting engine.
 % \Item[noautomatic] disables the automatic splitting of the raw
 % index files and running of the system programs; this option might
 % be used to save time when one knows for sure that the index files
@@ -305,7 +306,7 @@ and the derived files indextools.sty and indextools.pdf.
 % used.\\* Example: \texttt{title=Index of names}.
 % \Item[program] is the name of the system program that is used to
 % sort and format an index; valid choices are \prog{makeindex} ;
-% \prog{xindy}, or \prog{texindy}, plus \prog{truexindy} ; \prog{upmendex}. If not
+% \prog{xindy}, or \prog{texindy}, plus \prog{truexindy} ; \prog{upmendex} ; \prog{xindex}. If not
 % specified the program specified among the package options is used.
 % If no option is specified, \prog{makeindex} is used. In order to
 % use \prog{xindy}, it's necessary to call \prog{pdflatex} with
@@ -1010,6 +1011,7 @@ and the derived files indextools.sty and indextools.pdf.
 \DeclareOption{truexindy}{\def\indtl@progdefault{truexindy}}
 \DeclareOption{makeindex}{\def\indtl@progdefault{makeindex}}
 \DeclareOption{upmendex}{\def\indtl@progdefault{upmendex}}
+\DeclareOption{xindex}{\def\indtl@progdefault{xindex}}
 \newif\ifindtl@disableautomatic
 \DeclareOption{noautomatic}{\indtl@disableautomatictrue}
 \newif\ifindtl@nonewpage
@@ -1146,7 +1148,7 @@ and the derived files indextools.sty and indextools.pdf.
 \define@key{indtl}{name}{\def\indtl@name{#1}}
 \define@key{indtl}{title}{\def\indtl@title{#1}}
 \define@choicekey{indtl}{program}[\indtl@val\indtl@nr]
-  {makeindex,xindy,texindy,truexindy,upmendex}{%
+  {makeindex,xindy,texindy,truexindy,upmendex,xindex}{%
     \ifcase\indtl@nr\relax
       \def\indtl@program{makeindex}%
     \or
@@ -1157,6 +1159,8 @@ and the derived files indextools.sty and indextools.pdf.
       \def\indtl@program{xindy}%
     \or
       \def\indtl@program{upmendex}%
+    \or
+      \def\indtl@program{xindex}%
     \fi}
 \define@key{indtl}{options}{\def\indtl@options{ #1 }}
 \define@boolkey{indtl}{noautomatic}[true]{}
